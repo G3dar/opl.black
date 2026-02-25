@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Black Opal — The Dance</title>
+  <meta name="description" content="Black Opal presents The Dance — an immersive high-art luxury experience where human ingenuity and AI elegance blur into a seamless dance.">
+  <meta property="og:title" content="Black Opal — The Dance">
+  <meta property="og:description" content="An immersive dinner theater experience unlike anything on earth. Two stages. One civilization. One invitation.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'><path d='M10,50 Q60,5 110,50 Q60,95 10,50 Z' stroke='%23f5f5f5' fill='none' stroke-width='3'/><path d='M60,25 L80,50 L60,75 L40,50 Z' stroke='%23f5f5f5' fill='none' stroke-width='2'/></svg>">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -990,6 +997,174 @@
       color: var(--white);
       border-color: rgba(245, 245, 245, 0.6);
     }
+
+    /* === Noise Texture Overlay === */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* === Performance === */
+    .portal-container,
+    .reveal-line,
+    .vision-content,
+    .tribe-card,
+    .fork-panel,
+    .timeline-step,
+    .horizon-theme,
+    .encounter-line,
+    .contact-content {
+      will-change: transform, opacity;
+    }
+
+    /* === Responsive: Tablet (max-width: 768px) === */
+    @media (max-width: 768px) {
+      .tribes-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+      }
+
+      .fork-panels {
+        flex-direction: column;
+        height: auto;
+        gap: 2rem;
+      }
+
+      .fork-panel {
+        padding: 3rem 2rem;
+      }
+
+      .fork-divider {
+        display: none;
+      }
+
+      .vertical-text {
+        display: none;
+      }
+
+      .timeline-step {
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+
+      .timeline-step .step-label {
+        min-width: auto;
+      }
+
+      .ic-cards {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .ic-card {
+        max-width: 100%;
+      }
+    }
+
+    /* === Responsive: Mobile (max-width: 480px) === */
+    @media (max-width: 480px) {
+      section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      #tribes {
+        padding: 4rem 1rem;
+      }
+
+      .portal-title {
+        letter-spacing: 0.08em;
+      }
+
+      .fork-sticky {
+        padding: 1rem;
+      }
+
+      .table-content,
+      .horizon-content,
+      .encounter-content {
+        padding: 1.5rem 1rem;
+      }
+
+      .contact-content {
+        padding: 0 1rem;
+      }
+
+      .ic-overlay-inner {
+        padding: 1rem;
+      }
+    }
+
+    /* === Accessibility: Reduced Motion === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      #bg {
+        display: none;
+      }
+
+      .portal-title,
+      .portal-subtitle,
+      .portal-tagline,
+      .logo-svg,
+      .vertical-text,
+      .reveal-line,
+      .vision-content .headline,
+      .vision-sub,
+      .vision-para,
+      .vision-divider,
+      .vision-closing,
+      .vision-rule,
+      .tribes-header,
+      .tribe-card,
+      .fork-title,
+      .fork-panel,
+      .fork-panel h3,
+      .fork-teaser,
+      .table-header,
+      .table-intro,
+      .table-timeline-line,
+      .timeline-step,
+      .table-quote,
+      .horizon-header,
+      .horizon-intro,
+      .horizon-theme,
+      .horizon-closing,
+      .encounter-line,
+      .encounter-closing,
+      .encounter-sub,
+      .contact-content {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .vision-rule {
+        transform: scaleX(1) !important;
+      }
+
+      .table-timeline-line {
+        transform: scaleY(1) !important;
+      }
+
+      .vertical-text {
+        opacity: 0.4 !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1237,13 +1412,16 @@
       const renderer = new THREE.WebGLRenderer({
         canvas: canvas,
         alpha: true,
-        antialias: true
+        antialias: true,
+        powerPreference: 'high-performance'
       });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      // Particle count — reduced on low-end devices
-      const PARTICLE_COUNT = (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) ? 1500 : 3000;
+      // Particle count — reduced on low-end/mobile devices
+      const isMobile = window.innerWidth <= 768;
+      const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+      const PARTICLE_COUNT = (isMobile || isLowEnd) ? 1500 : 3000;
 
       // Create particles in a sphere distribution
       const geometry = new THREE.BufferGeometry();
