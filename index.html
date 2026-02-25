@@ -92,13 +92,125 @@
       font-family: 'Playfair Display', serif;
       font-style: italic;
     }
+
+    /* === Portal / Hero === */
+    #portal {
+      min-height: 100vh;
+      flex-direction: column;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .portal-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .logo-svg {
+      width: clamp(80px, 12vw, 140px);
+      height: auto;
+      opacity: 0;
+    }
+
+    .logo-svg path,
+    .logo-svg line {
+      stroke: var(--white);
+      stroke-width: 1.5;
+      fill: none;
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+    }
+
+    .portal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      line-height: 1.05;
+      opacity: 0;
+    }
+
+    .portal-title span {
+      display: block;
+    }
+
+    .portal-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.7rem, 1.2vw, 0.95rem);
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+
+    .portal-tagline {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      max-width: 500px;
+      opacity: 0;
+      color: rgba(245, 245, 245, 0.8);
+    }
+
+    .vertical-text {
+      position: fixed;
+      left: 1.5rem;
+      top: 50%;
+      transform: rotate(-90deg) translateX(-50%);
+      transform-origin: left center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 300;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(245, 245, 245, 0.4);
+      white-space: nowrap;
+      z-index: 10;
+      opacity: 0;
+    }
   </style>
 </head>
 <body>
 
   <canvas id="bg"></canvas>
 
-  <section id="portal"></section>
+  <!-- Vertical side text — persists through multiple sections -->
+  <div class="vertical-text">An Immersive High-Art Luxury Experience</div>
+
+  <section id="portal">
+    <div class="portal-container">
+      <!-- Black Opal Logo — eye/diamond motif -->
+      <svg class="logo-svg" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer eye shape -->
+        <path d="M10,50 Q60,5 110,50 Q60,95 10,50 Z" />
+        <!-- Inner diamond -->
+        <path d="M60,25 L80,50 L60,75 L40,50 Z" />
+        <!-- Central circle -->
+        <circle cx="60" cy="50" r="8" stroke-width="1.5" fill="none" />
+        <!-- Radiating lines -->
+        <line x1="60" y1="15" x2="60" y2="25" />
+        <line x1="60" y1="75" x2="60" y2="85" />
+        <line x1="25" y1="50" x2="40" y2="50" />
+        <line x1="80" y1="50" x2="95" y2="50" />
+        <!-- Diagonal rays -->
+        <line x1="38" y1="30" x2="45" y2="38" />
+        <line x1="82" y1="30" x2="75" y2="38" />
+        <line x1="38" y1="70" x2="45" y2="62" />
+        <line x1="82" y1="70" x2="75" y2="62" />
+      </svg>
+
+      <h1 class="portal-title">
+        <span>BLACK</span>
+        <span>OPAL</span>
+      </h1>
+
+      <p class="portal-subtitle">The Dance</p>
+
+      <p class="portal-tagline accent">"An intelligent species has been evolving beside us&hellip;"</p>
+    </div>
+  </section>
   <section id="reveal"></section>
   <section id="vision"></section>
   <section id="tribes"></section>
@@ -232,6 +344,49 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       });
+    })();
+
+    // =============================================
+    // Portal — Entrance Animations
+    // =============================================
+    (function() {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      // Logo SVG draws in (stroke-dashoffset 500 → 0)
+      tl.to('.logo-svg', { opacity: 1, duration: 0.3 })
+        .to('.logo-svg path, .logo-svg line, .logo-svg circle', {
+          strokeDashoffset: 0,
+          duration: 1.5,
+          stagger: 0.08,
+          ease: 'power2.inOut'
+        }, '<')
+        // Title fades up, staggered per span
+        .to('.portal-title', { opacity: 1, duration: 0.1 }, '-=0.8')
+        .from('.portal-title span', {
+          y: 30,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.15,
+          ease: 'power3.out'
+        }, '-=0.8')
+        // Subtitle fades in
+        .to('.portal-subtitle', {
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power2.out'
+        }, '-=0.3')
+        // Tagline fades in
+        .to('.portal-tagline', {
+          opacity: 1,
+          duration: 1,
+          ease: 'power2.out'
+        }, '-=0.2')
+        // Vertical side text fades in with tagline
+        .to('.vertical-text', {
+          opacity: 0.4,
+          duration: 1,
+          ease: 'power2.out'
+        }, '<');
     })();
   </script>
 
