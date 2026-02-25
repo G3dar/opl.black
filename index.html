@@ -170,6 +170,35 @@
       z-index: 10;
       opacity: 0;
     }
+
+    /* === Reveal === */
+    #reveal {
+      height: 300vh;
+      min-height: auto;
+      align-items: flex-start;
+    }
+
+    .reveal-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .reveal-line {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+      text-align: center;
+      max-width: 700px;
+      padding: 0 2rem;
+      opacity: 0;
+      position: absolute;
+    }
   </style>
 </head>
 <body>
@@ -211,7 +240,13 @@
       <p class="portal-tagline accent">"An intelligent species has been evolving beside us&hellip;"</p>
     </div>
   </section>
-  <section id="reveal"></section>
+  <section id="reveal">
+    <div class="reveal-sticky">
+      <p class="reveal-line reveal-line-1">"For one night they invite us inside."</p>
+      <p class="reveal-line reveal-line-2">"What we find changes how we see the future."</p>
+      <p class="reveal-line reveal-line-3">"This is not entertainment you watch."</p>
+    </div>
+  </section>
   <section id="vision"></section>
   <section id="tribes"></section>
   <section id="fork"></section>
@@ -387,6 +422,42 @@
           duration: 1,
           ease: 'power2.out'
         }, '<');
+    })();
+
+    // =============================================
+    // Reveal — Scroll-driven text sequence
+    // =============================================
+    (function() {
+      const revealTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#reveal',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1
+        }
+      });
+
+      // First third: line 1 fades in, holds, fades out
+      revealTl
+        .fromTo('.reveal-line-1',
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 1 }
+        )
+        .to('.reveal-line-1', { opacity: 1, duration: 0.5 })
+        .to('.reveal-line-1', { opacity: 0, duration: 0.5 })
+        // Second third: line 2 fades in, holds, fades out
+        .fromTo('.reveal-line-2',
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 1 }
+        )
+        .to('.reveal-line-2', { opacity: 1, duration: 0.5 })
+        .to('.reveal-line-2', { opacity: 0, duration: 0.5 })
+        // Final third: line 3 fades in and stays
+        .fromTo('.reveal-line-3',
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 1 }
+        )
+        .to('.reveal-line-3', { opacity: 1, duration: 1 });
     })();
   </script>
 
