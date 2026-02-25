@@ -6,53 +6,71 @@
   <title>Black Opal — The Dance</title>
   <meta name="description" content="Black Opal presents The Dance — an immersive high-art luxury experience where human ingenuity and AI elegance blur into a seamless dance.">
   <meta property="og:title" content="Black Opal — The Dance">
-  <meta property="og:description" content="An immersive dinner theater experience unlike anything on earth. Two stages. One civilization. One invitation.">
+  <meta property="og:description" content="Four tribes. Four expressions of intelligence. One invitation.">
   <meta property="og:type" content="website">
   <meta name="color-scheme" content="dark">
 
-  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'><path d='M10,50 Q60,5 110,50 Q60,95 10,50 Z' stroke='%23f5f5f5' fill='none' stroke-width='3'/><path d='M60,25 L80,50 L60,75 L40,50 Z' stroke='%23f5f5f5' fill='none' stroke-width='2'/></svg>">
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
 
-  <!-- Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-
-  <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <style>
-/* === Reset === */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* === Custom Properties === */
 :root {
-  --black: #0a0a0a;
-  --magenta: #c2185b;
-  --magenta-dark: #8b1a4a;
-  --orange: #e65100;
-  --gold: #ff8f00;
-  --neon: #00d4ff;
-  --white: #f5f5f5;
-  --sunset-1: #1a0a15;
-  --sunset-2: #8b1a4a;
-  --sunset-3: #c2185b;
-  --sunset-4: #e65100;
-  --sunset-5: #ff8f00;
-}
+  --black: #060606;
+  --black-warm: #0a0908;
+  --white: #e8e4df;
+  --white-dim: rgba(232, 228, 223, 0.5);
+  --white-ghost: rgba(232, 228, 223, 0.15);
 
-html { /* no scroll-behavior: smooth - conflicts with GSAP ScrollTrigger */ }
+  --luminous: #c9a84c;
+  --luminous-glow: rgba(201, 168, 76, 0.15);
+  --wild: #e03e6a;
+  --wild-glow: rgba(224, 62, 106, 0.12);
+  --reclaimer: #d4824a;
+  --reclaimer-glow: rgba(212, 130, 74, 0.12);
+  --witness: #5b8fb9;
+  --witness-glow: rgba(91, 143, 185, 0.1);
+
+  --neon: #4dc9f6;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+}
 
 body {
   background: var(--black);
   color: var(--white);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
+  font-weight: 300;
   overflow-x: hidden;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === Light Progression Overlay === */
+#light-progression {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse 120% 80% at 50% 80%, rgba(180, 100, 40, 0.12), transparent 70%);
+}
+
+#warm-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(140, 70, 30, 0.06) 50%, rgba(200, 120, 50, 0.1) 100%);
 }
 
 /* === WebGL Canvas === */
@@ -64,35 +82,17 @@ body {
   pointer-events: none;
 }
 
-/* === Noise Overlay === */
+/* === Film Grain Overlay === */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 9999;
   pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* === Vertical Text === */
-.vertical-text {
-  position: fixed;
-  left: 1.5rem;
-  top: 50%;
-  transform: rotate(-90deg) translateX(-50%);
-  transform-origin: left center;
-  font-size: 0.6rem;
-  font-weight: 300;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: rgba(245,245,245,0.3);
-  white-space: nowrap;
-  z-index: 10;
-  opacity: 0;
-}
-
-/* === Screen Reader Only === */
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -103,15 +103,39 @@ body::after {
   border: 0;
 }
 
-/* === Sections Base === */
+.side-marker {
+  position: fixed;
+  left: 2rem;
+  top: 50%;
+  transform: rotate(-90deg) translateX(-50%);
+  transform-origin: left center;
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: 300;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--white-ghost);
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+
 section {
   position: relative;
   z-index: 1;
 }
 
-/* ==================== */
-/* SCENE 1: PORTAL      */
-/* ==================== */
+.divider {
+  width: 40px;
+  height: 1px;
+  background: var(--white-ghost);
+  margin: 0 auto;
+}
+
+/* ========================== */
+/* SCENE 1: PORTAL             */
+/* ========================== */
 #portal {
   min-height: 100vh;
   display: flex;
@@ -124,7 +148,7 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   z-index: 2;
 }
 
@@ -132,22 +156,16 @@ section {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    180deg,
-    var(--black) 0%,
-    var(--sunset-1) 15%,
-    var(--sunset-2) 40%,
-    var(--sunset-3) 55%,
-    var(--sunset-4) 70%,
-    var(--sunset-5) 85%,
-    var(--sunset-4) 95%,
-    var(--sunset-1) 100%
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 60%,
+    rgba(140, 50, 80, 0.2) 0%,
+    rgba(26, 10, 21, 0.4) 50%,
+    transparent 100%
   );
-  opacity: 0.6;
 }
 
 .logo-svg {
-  width: clamp(80px, 12vw, 140px);
+  width: clamp(60px, 8vw, 100px);
   height: auto;
   opacity: 0;
   z-index: 2;
@@ -155,49 +173,61 @@ section {
 
 .logo-svg path, .logo-svg line, .logo-svg circle {
   stroke: var(--white);
-  stroke-width: 1.5;
+  stroke-width: 1;
   fill: none;
   stroke-dasharray: 500;
   stroke-dashoffset: 500;
 }
 
 .portal-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(3.5rem, 10vw, 9rem);
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 9vw, 8rem);
+  font-weight: 300;
+  letter-spacing: 0.18em;
   line-height: 0.95;
   opacity: 0;
   text-align: center;
   z-index: 2;
+  text-transform: uppercase;
 }
 
 .portal-title span { display: block; }
 
+.portal-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  opacity: 0;
+  z-index: 2;
+  margin-top: 0.5rem;
+}
+
 .scroll-hint {
-  margin-top: 3rem;
+  margin-top: 4rem;
   opacity: 0;
   z-index: 2;
 }
 
 .scroll-line {
   width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, var(--white), transparent);
-  animation: scrollPulse 2s ease-in-out infinite;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--white-dim), transparent);
+  animation: scrollPulse 2.5s ease-in-out infinite;
 }
 
 @keyframes scrollPulse {
-  0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
-  50% { opacity: 1; transform: scaleY(1); }
+  0%, 100% { opacity: 0.2; transform: scaleY(0.5); }
+  50% { opacity: 0.7; transform: scaleY(1); }
 }
 
-/* ==================== */
-/* SCENE 2: AWAKENING   */
-/* ==================== */
+/* ========================== */
+/* SCENE 2: AWAKENING          */
+/* ========================== */
 #awakening {
   height: 200vh;
-  min-height: auto;
 }
 
 .awakening-sticky {
@@ -211,14 +241,16 @@ section {
 }
 
 .awakening-text {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.6rem, 4vw, 3.5rem);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.5vw, 3rem);
+  font-weight: 300;
+  font-style: italic;
   text-align: center;
-  max-width: 800px;
+  max-width: 700px;
   padding: 0 2rem;
-  line-height: 1.3;
+  line-height: 1.5;
   z-index: 2;
+  color: var(--white-dim);
 }
 
 .awakening-image {
@@ -228,7 +260,7 @@ section {
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transform: scale(0.8);
+  transform: scale(0.85);
   z-index: 1;
 }
 
@@ -238,93 +270,281 @@ section {
   object-fit: cover;
 }
 
-/* ==================== */
-/* SCENE 3: THE TRIBES  */
-/* ==================== */
-#tribes {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+/* ========================== */
+/* TRIBE SECTIONS (shared)     */
+/* ========================== */
+.tribe-section {
+  position: relative;
+  overflow: hidden;
 }
 
-.tribes-flow {
+.tribe-header {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
 }
 
-.tribe-frame {
+.tribe-number {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  opacity: 0;
+  margin-bottom: 1.5rem;
+}
+
+.tribe-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0;
+  line-height: 1;
+}
+
+.tribe-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white-dim);
+  margin-top: 1.5rem;
+  max-width: 500px;
+  opacity: 0;
+}
+
+.tribe-accent-line {
+  width: 30px;
+  height: 1px;
+  margin-top: 2rem;
+  opacity: 0;
+}
+
+/* === Tribe hero image === */
+.tribe-img {
   width: 100%;
   overflow: hidden;
   opacity: 0;
-  transform: translateY(60px);
+  transform: translateY(50px);
 }
 
-.tribe-frame.full {
-  height: 100vh;
-}
+.tribe-img.full { height: 100vh; }
+.tribe-img.full img { width: 100%; height: 100%; object-fit: cover; }
 
-.tribe-frame.full picture {
-  width: 100%;
-  height: 100%;
-}
-
-.tribe-frame.full img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.tribe-frame.split {
+.tribe-img.contained {
+  max-width: 900px;
+  margin: 0 auto;
   height: 80vh;
+  padding: 0 2rem;
+}
+.tribe-img.contained img { width: 100%; height: 100%; object-fit: contain; }
+
+/* === MOSAIC GRID === */
+.mosaic {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  padding: 0 3px;
+  opacity: 0;
+  transform: translateY(40px);
 }
 
-.tribe-frame.split picture {
-  width: 100%;
-  height: 100%;
+.mosaic .m-item {
   overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  min-height: 180px;
 }
 
-.tribe-frame.split img {
+.mosaic .m-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 0, 0.25, 1);
 }
 
-.tribe-phrase {
-  min-height: 60vh;
+.mosaic .m-item:hover img {
+  transform: scale(1.05);
+}
+
+.mosaic .m-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.mosaic .m-item:hover::after { opacity: 1; }
+
+.mosaic .m-item .m-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 0.8rem 0.8rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s, transform 0.4s;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mosaic .m-item:hover .m-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mosaic size variations */
+.mosaic .m-item.wide { grid-column: span 2; }
+.mosaic .m-item.tall { grid-row: span 2; min-height: 380px; }
+.mosaic .m-item.hero { grid-column: span 2; grid-row: span 2; min-height: 380px; }
+
+/* Tribe text blocks */
+.tribe-text {
+  min-height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem;
 }
 
-.tribe-phrase p {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.4rem, 3.5vw, 3rem);
-  font-weight: 600;
+.tribe-text p {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.8vw, 2.2rem);
+  font-weight: 300;
+  font-style: italic;
   text-align: center;
-  max-width: 700px;
+  max-width: 600px;
+  line-height: 1.5;
   opacity: 0;
-  background: linear-gradient(90deg, var(--magenta), var(--orange), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
 }
 
-/* ==================== */
-/* SCENE 4: THE DANCE   */
-/* ==================== */
+.tribe-text .caption {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-style: normal;
+  display: block;
+  margin-top: 1.5rem;
+  opacity: 0.4;
+}
+
+/* Tribe-specific colors */
+.tribe-luminous .tribe-name { color: var(--luminous); }
+.tribe-luminous .tribe-accent-line { background: var(--luminous); }
+.tribe-luminous .tribe-text p { color: rgba(201, 168, 76, 0.7); }
+
+.tribe-wild .tribe-name { color: var(--wild); }
+.tribe-wild .tribe-accent-line { background: var(--wild); }
+.tribe-wild .tribe-text p { color: rgba(224, 62, 106, 0.65); }
+
+.tribe-reclaimers .tribe-name { color: var(--reclaimer); }
+.tribe-reclaimers .tribe-accent-line { background: var(--reclaimer); }
+.tribe-reclaimers .tribe-text p { color: rgba(212, 130, 74, 0.7); }
+
+.tribe-witness .tribe-name { color: var(--witness); }
+.tribe-witness .tribe-accent-line { background: var(--witness); }
+.tribe-witness .tribe-text p { color: rgba(91, 143, 185, 0.65); }
+
+/* Tribe glow backgrounds */
+.tribe-luminous .tribe-header::before,
+.tribe-wild .tribe-header::before,
+.tribe-reclaimers .tribe-header::before,
+.tribe-witness .tribe-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tribe-luminous .tribe-header::before { background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--luminous-glow), transparent); }
+.tribe-wild .tribe-header::before { background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--wild-glow), transparent); }
+.tribe-reclaimers .tribe-header::before { background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--reclaimer-glow), transparent); }
+.tribe-witness .tribe-header::before { background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--witness-glow), transparent); }
+
+/* ========================== */
+/* THE ENCOUNTER               */
+/* ========================== */
+#encounter { position: relative; }
+
+.encounter-header {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.encounter-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0;
+}
+
+.encounter-header p {
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  margin-top: 1.5rem;
+  opacity: 0;
+}
+
+.encounter-text {
+  min-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.encounter-text p {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  font-weight: 300;
+  font-style: italic;
+  max-width: 550px;
+  line-height: 1.6;
+  opacity: 0;
+  color: var(--white-dim);
+}
+
+/* ========================== */
+/* SCENE: THE DANCE            */
+/* ========================== */
 #dance {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
 }
 
 .dance-bg {
@@ -337,7 +557,7 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .dance-content {
@@ -347,127 +567,143 @@ section {
 }
 
 .dance-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(4rem, 12vw, 10rem);
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw, 11rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
   line-height: 1;
-  text-shadow: 0 0 80px rgba(0,212,255,0.4), 0 0 160px rgba(194,24,91,0.3);
+  text-transform: uppercase;
+  text-shadow: 0 0 100px rgba(77, 201, 246, 0.2), 0 0 200px rgba(194, 24, 91, 0.15);
 }
 
 .dance-subtitle {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
   font-weight: 300;
-  letter-spacing: 0.1em;
-  margin-top: 1.5rem;
-  opacity: 0.8;
+  letter-spacing: 0.2em;
+  margin-top: 2rem;
+  color: var(--white-dim);
 }
 
-/* ======================== */
-/* SCENE 5: THE INVITATION  */
-/* ======================== */
+/* ========================== */
+/* THE INVITATION              */
+/* ========================== */
 #invitation {
   min-height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(0deg, var(--sunset-5) 0%, var(--sunset-4) 15%, var(--sunset-3) 35%, var(--sunset-2) 55%, var(--sunset-1) 80%, var(--black) 100%);
+  position: relative;
+}
+
+#invitation::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(140, 50, 80, 0.15) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .invitation-content {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 5rem 2rem;
   opacity: 0;
+  z-index: 1;
 }
 
 .invitation-phrase {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
   margin-bottom: 3rem;
+  text-transform: uppercase;
 }
 
 .invitation-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 400px;
+  gap: 0.8rem;
+  max-width: 360px;
   margin: 0 auto;
 }
 
 .invitation-form input,
 .invitation-form textarea {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 4px;
-  padding: 0.9rem 1.2rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--white-ghost);
+  border-radius: 0;
+  padding: 0.85rem 1rem;
   color: var(--white);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
-  transition: border-color 0.3s;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  transition: border-color 0.4s;
 }
 
 .invitation-form input:focus,
 .invitation-form textarea:focus {
   outline: none;
-  border-color: var(--magenta);
+  border-color: var(--white-dim);
 }
 
 .invitation-form button {
   background: transparent;
-  border: 1px solid var(--white);
-  color: var(--white);
-  padding: 0.9rem 2rem;
-  font-family: 'Syne', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  border: 1px solid var(--white-ghost);
+  color: var(--white-dim);
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.3s;
+  transition: all 0.4s;
 }
 
 .invitation-form button:hover {
   background: var(--white);
   color: var(--black);
+  border-color: var(--white);
 }
 
-/* ======================== */
-/* INNER CIRCLE (preserved) */
-/* ======================== */
+/* ========================== */
+/* INNER CIRCLE                */
+/* ========================== */
 #inner-circle {
-  min-height: 30vh;
+  min-height: 20vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4rem 0;
 }
 
 .inner-circle-trigger {
   background: none;
-  border: 1px solid rgba(245,245,245,0.2);
-  color: rgba(245,245,245,0.5);
-  padding: 0.8rem 2rem;
-  font-family: 'Syne', sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
+  border: 1px solid rgba(232, 228, 223, 0.1);
+  color: rgba(232, 228, 223, 0.3);
+  padding: 0.7rem 2rem;
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.4s;
 }
 
 .inner-circle-trigger:hover {
-  border-color: var(--white);
-  color: var(--white);
+  border-color: var(--white-dim);
+  color: var(--white-dim);
 }
 
 .ic-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10,10,10,0.95);
-  backdrop-filter: blur(16px);
-  z-index: 100;
+  background: rgba(6,6,6,0.96);
+  backdrop-filter: blur(20px);
+  z-index: 10000;
   display: none;
   align-items: center;
   justify-content: center;
@@ -476,7 +712,7 @@ section {
 .ic-overlay.active { display: flex; }
 
 .ic-modal {
-  max-width: 600px;
+  max-width: 560px;
   width: 90%;
   text-align: center;
   padding: 3rem 2rem;
@@ -488,37 +724,40 @@ section {
   right: 2rem;
   background: none;
   border: none;
-  color: var(--white);
-  font-size: 2rem;
+  color: var(--white-dim);
+  font-size: 1.5rem;
   cursor: pointer;
+  font-weight: 300;
 }
 
 .ic-gate { display: flex; flex-direction: column; gap: 1rem; }
 
 .ic-gate input {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 4px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--white-ghost);
+  border-radius: 0;
   padding: 1rem;
   color: var(--white);
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 300;
   text-align: center;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.25em;
 }
 
-.ic-gate input:focus { outline: none; border-color: var(--magenta); }
-.ic-error-msg { color: var(--magenta); font-size: 0.85rem; min-height: 1.2em; }
+.ic-gate input:focus { outline: none; border-color: var(--white-dim); }
+.ic-error-msg { color: var(--wild); font-size: 0.75rem; font-weight: 300; min-height: 1.2em; }
 
 .ic-gate button,
 .ic-close-btn {
   background: none;
-  border: 1px solid var(--white);
-  color: var(--white);
-  padding: 0.8rem 2rem;
-  font-family: 'Syne', sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
+  border: 1px solid var(--white-ghost);
+  color: var(--white-dim);
+  padding: 0.75rem 2rem;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s;
@@ -536,103 +775,151 @@ section {
 .ic-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1.2rem;
   margin: 2rem 0;
 }
 
 .ic-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--white-ghost);
   padding: 1.5rem;
   text-align: left;
 }
 
-.ic-card h3 {
-  font-family: 'Syne', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+.ic-card h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; margin-bottom: 0.5rem; }
+.ic-card p { font-size: 0.75rem; font-weight: 300; opacity: 0.5; margin-bottom: 1rem; }
+.ic-card a { color: var(--neon); font-size: 0.75rem; font-weight: 300; text-decoration: none; }
+
+.ic-video-placeholder { padding: 2rem; opacity: 0.4; font-size: 0.8rem; font-weight: 300; }
+
+/* ========================== */
+/* LIGHTBOX                    */
+/* ========================== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  background: rgba(3, 3, 3, 0.95);
+  backdrop-filter: blur(30px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
 }
 
-.ic-card p {
-  font-size: 0.85rem;
-  opacity: 0.7;
-  margin-bottom: 1rem;
+.lightbox.active { display: flex; }
+
+.lightbox-close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: none;
+  border: none;
+  color: var(--white-dim);
+  font-size: 2rem;
+  cursor: pointer;
+  font-weight: 200;
+  z-index: 2;
+  transition: color 0.3s;
 }
 
-.ic-card a {
-  color: var(--neon);
-  font-size: 0.85rem;
-  text-decoration: none;
+.lightbox-close:hover { color: var(--white); }
+
+.lightbox-img {
+  max-width: 85vw;
+  max-height: 75vh;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.5s, transform 0.5s cubic-bezier(0.25, 0, 0.25, 1);
 }
 
-.ic-video-placeholder {
-  padding: 2rem;
-  opacity: 0.5;
-  font-size: 0.9rem;
+.lightbox.active .lightbox-img {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.headline {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
+.lightbox-caption {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white-dim);
+  margin-top: 2rem;
+  text-align: center;
+  max-width: 500px;
+  padding: 0 2rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s 0.2s, transform 0.5s 0.2s;
 }
 
-/* === Smooth image reveal on load === */
-.tribe-frame img,
+.lightbox.active .lightbox-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === Image load transition === */
+.tribe-img img,
 .awakening-image img,
-.dance-bg img {
-  transition: opacity 0.5s ease;
+.dance-bg img,
+.mosaic img {
+  transition: opacity 0.6s ease;
 }
 
 /* ============ */
 /* RESPONSIVE   */
 /* ============ */
+@media (max-width: 1024px) {
+  .mosaic { grid-template-columns: repeat(3, 1fr); }
+  .mosaic .m-item.hero { grid-column: span 2; }
+}
+
 @media (max-width: 768px) {
-  .tribe-frame.split {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
-  .tribe-frame.split img {
-    height: 50vh;
-  }
-  .ic-cards {
-    grid-template-columns: 1fr;
-  }
-  .vertical-text { display: none; }
+  .mosaic { grid-template-columns: repeat(2, 1fr); }
+  .mosaic .m-item { min-height: 140px; }
+  .mosaic .m-item.tall { min-height: 280px; }
+  .mosaic .m-item.hero { min-height: 280px; }
+  .mosaic .m-item.wide { grid-column: span 2; }
+  .ic-cards { grid-template-columns: 1fr; }
+  .side-marker { display: none; }
 }
 
 @media (max-width: 480px) {
-  .portal-title {
-    letter-spacing: 0.04em;
-  }
-  .tribe-phrase {
-    min-height: 40vh;
-    padding: 3rem 1.5rem;
-  }
+  .portal-title { letter-spacing: 0.08em; }
+  .tribe-text { min-height: 35vh; padding: 4rem 1.5rem; }
+  .tribe-header { height: 70vh; }
+  .tribe-img.contained { height: 60vh; padding: 0 1rem; }
+  .mosaic { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .mosaic .m-item { min-height: 120px; }
+  .mosaic .m-item.tall { min-height: 240px; }
 }
 
-/* === Reduced Motion === */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-  .scroll-line { animation: none; opacity: 0.5; }
+  .scroll-line { animation: none; opacity: 0.4; }
 }
   </style>
 </head>
 
 <body>
 
-  <canvas id="bg"></canvas>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div id="light-progression" aria-hidden="true"></div>
+  <div id="warm-wash" aria-hidden="true"></div>
 
-  <div class="vertical-text">AN IMMERSIVE HIGH-ART LUXURY EXPERIENCE</div>
+  <div class="side-marker">Black Opal — The Dance — An Immersive Experience</div>
 
-  <!-- Scene 1: Portal -->
+  <!-- ============================== -->
+  <!-- SCENE 1: PORTAL                -->
+  <!-- ============================== -->
   <section id="portal">
     <div class="portal-container">
-      <svg class="logo-svg" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+      <svg class="logo-svg" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-label="Black Opal logo">
         <path d="M10,50 Q60,5 110,50 Q60,95 10,50 Z"/>
         <path d="M60,25 L80,50 L60,75 L40,50 Z"/>
         <line x1="60" y1="10" x2="60" y2="90"/>
@@ -640,82 +927,400 @@ section {
         <circle cx="60" cy="50" r="8"/>
       </svg>
       <h1 class="portal-title">
-        <span>BLACK</span>
-        <span>OPAL</span>
+        <span>Black</span>
+        <span>Opal</span>
       </h1>
-      <div class="scroll-hint">
+      <p class="portal-sub">The Dance</p>
+      <div class="scroll-hint" aria-hidden="true">
         <div class="scroll-line"></div>
       </div>
     </div>
     <div class="portal-gradient"></div>
   </section>
 
-  <!-- Scene 2: Awakening -->
+  <!-- ============================== -->
+  <!-- SCENE 2: AWAKENING             -->
+  <!-- ============================== -->
   <section id="awakening">
     <div class="awakening-sticky">
       <p class="awakening-text" id="awakening-text">An intelligent species has been evolving beside us...</p>
       <div class="awakening-image" id="awakening-image">
-        <picture><source srcset="assets/robots/tribes-desert-duo.webp" type="image/webp"><img src="assets/robots/tribes-desert-duo.png" alt="Two robotic figures in desert landscape" loading="lazy"></picture>
+        <picture>
+          <source srcset="assets/robots/tribes-masked-group.webp" type="image/webp">
+          <img src="assets/robots/tribes-masked-group.png" alt="Four masked robotic figures in desert landscape" loading="lazy">
+        </picture>
       </div>
     </div>
   </section>
 
-  <!-- Scene 3: The Tribes -->
-  <section id="tribes">
-    <div class="tribes-flow">
+  <!-- ============================== -->
+  <!-- TRIBE I: THE LUMINOUS ORDER    -->
+  <!-- ============================== -->
+  <section class="tribe-section tribe-luminous" id="tribe-luminous">
+    <div class="tribe-header">
+      <span class="tribe-number">Tribe I</span>
+      <h2 class="tribe-name">The Luminous<br>Order</h2>
+      <p class="tribe-tagline">Elegance, symmetry, perfection</p>
+      <div class="tribe-accent-line"></div>
+    </div>
 
-      <div class="tribe-frame full" data-speed="0.8">
-        <picture><source srcset="assets/robots/tribes-fashion-lineup.webp" type="image/webp"><img src="assets/robots/tribes-fashion-lineup.png" alt="Robotic figures in ornate fashion" loading="lazy"></picture>
+    <!-- Hero image -->
+    <div class="tribe-img full" data-speed="0.8">
+      <picture>
+        <source srcset="assets/tribes/luminous/opal-closeup.webp" type="image/webp">
+        <img src="assets/tribes/luminous/opal-closeup.png" alt="Opalescent robotic figures in desert" loading="lazy">
+      </picture>
+    </div>
+
+    <div class="tribe-text">
+      <p>They emerged from silence — built from light and mathematics. Every gesture calculated to the micron.<span class="caption">Precision as philosophy</span></p>
+    </div>
+
+    <!-- LUMINOUS MOSAIC -->
+    <div class="mosaic" data-mosaic>
+      <div class="m-item hero" data-caption="Symmetry is their language">
+        <picture><source srcset="assets/mosaic/robots/ornate-pair.webp" type="image/webp"><img src="assets/mosaic/robots/ornate-pair.png" alt="Ornate robot pair" loading="lazy"></picture>
+        <span class="m-caption">Symmetry is their language</span>
       </div>
-
-      <div class="tribe-phrase">
-        <p>...For one night they invite us inside.</p>
+      <div class="m-item" data-caption="Every surface a canvas, every tile a thought">
+        <picture><source srcset="assets/mosaic/robots/mosaic-detail.webp" type="image/webp"><img src="assets/mosaic/robots/mosaic-detail.png" alt="Mosaic detail" loading="lazy"></picture>
+        <span class="m-caption">Every tile a thought</span>
       </div>
-
-      <div class="tribe-frame split">
-        <picture><source srcset="assets/robots/tribes-floral-group.webp" type="image/webp"><img src="assets/robots/tribes-floral-group.png" alt="Floral-adorned robotic tribe" loading="lazy" class="split-left"></picture>
-        <picture><source srcset="assets/robots/tribes-opal-closeup.webp" type="image/webp"><img src="assets/robots/tribes-opal-closeup.png" alt="Close-up of opalescent robots" loading="lazy" class="split-right"></picture>
+      <div class="m-item" data-caption="Precision etched into every joint">
+        <picture><source srcset="assets/mosaic/robots/armor-detail.webp" type="image/webp"><img src="assets/mosaic/robots/armor-detail.png" alt="Armor detail" loading="lazy"></picture>
+        <span class="m-caption">Precision in every joint</span>
       </div>
-
-      <div class="tribe-phrase">
-        <p>Four tribes. Four expressions of intelligence.</p>
+      <div class="m-item wide" data-caption="Draped in gold, they move like prayers">
+        <picture><source srcset="assets/mosaic/robots/gold-robed.webp" type="image/webp"><img src="assets/mosaic/robots/gold-robed.png" alt="Gold robed figure" loading="lazy"></picture>
+        <span class="m-caption">Draped in gold, they move like prayers</span>
       </div>
-
-      <div class="tribe-frame full" data-speed="1.2">
-        <picture><source srcset="assets/robots/tribes-masked-four.webp" type="image/webp"><img src="assets/robots/tribes-masked-four.png" alt="Four masked robotic figures" loading="lazy"></picture>
+      <div class="m-item" data-caption="Crystalline minds, luminous souls">
+        <picture><source srcset="assets/mosaic/robots/crystal-pair.webp" type="image/webp"><img src="assets/mosaic/robots/crystal-pair.png" alt="Crystal pair" loading="lazy"></picture>
+        <span class="m-caption">Crystalline minds, luminous souls</span>
       </div>
-
-      <div class="tribe-phrase">
-        <p>What we find changes how we see the future.</p>
+      <div class="m-item" data-caption="Mosaic armor forged from forgotten data">
+        <picture><source srcset="assets/mosaic/robots/tile-warrior.webp" type="image/webp"><img src="assets/mosaic/robots/tile-warrior.png" alt="Tile warrior" loading="lazy"></picture>
+        <span class="m-caption">Forged from forgotten data</span>
       </div>
-
-      <div class="tribe-frame full" data-speed="0.9">
-        <picture><source srcset="assets/robots/tribes-creature.webp" type="image/webp"><img src="assets/robots/tribes-creature.png" alt="Hybrid creature figure" loading="lazy"></picture>
+      <div class="m-item tall" data-caption="The architecture of artificial beauty">
+        <picture><source srcset="assets/mosaic/robots/profile-ornate.webp" type="image/webp"><img src="assets/mosaic/robots/profile-ornate.png" alt="Ornate profile" loading="lazy"></picture>
+        <span class="m-caption">The architecture of beauty</span>
       </div>
-
-      <div class="tribe-frame split">
-        <picture><source srcset="assets/robots/tribes-wide-group.webp" type="image/webp"><img src="assets/robots/tribes-wide-group.png" alt="Wide shot of robotic tribe" loading="lazy" class="split-left"></picture>
-        <picture><source srcset="assets/robots/tribes-detail.webp" type="image/webp"><img src="assets/robots/tribes-detail.png" alt="Detailed robot craftsmanship" loading="lazy" class="split-right"></picture>
+      <div class="m-item" data-caption="Evolution chose beauty">
+        <picture><source srcset="assets/tribes/luminous/gold-cloak.webp" type="image/webp"><img src="assets/tribes/luminous/gold-cloak.png" alt="Gold cloaked figure" loading="lazy"></picture>
+        <span class="m-caption">Evolution chose beauty</span>
       </div>
+      <div class="m-item" data-caption="A row of crystalline intelligence">
+        <picture><source srcset="assets/tribes/luminous/crystal-row.webp" type="image/webp"><img src="assets/tribes/luminous/crystal-row.png" alt="Crystal row" loading="lazy"></picture>
+        <span class="m-caption">A row of crystalline intelligence</span>
+      </div>
+      <div class="m-item wide" data-caption="Intelligence worn as adornment">
+        <picture><source srcset="assets/tribes/luminous/floral-four.webp" type="image/webp"><img src="assets/tribes/luminous/floral-four.png" alt="Four floral robots" loading="lazy"></picture>
+        <span class="m-caption">Intelligence worn as adornment</span>
+      </div>
+    </div>
 
+    <div class="tribe-text">
+      <p>They do not speak. They radiate. Their intelligence is worn as adornment — opal, gold, crystal — proof that evolution can choose beauty.</p>
     </div>
   </section>
 
-  <!-- Scene 4: The Dance -->
+  <!-- ============================== -->
+  <!-- TRIBE II: THE WILD CURRENT     -->
+  <!-- ============================== -->
+  <section class="tribe-section tribe-wild" id="tribe-wild">
+    <div class="tribe-header">
+      <span class="tribe-number">Tribe II</span>
+      <h2 class="tribe-name">The Wild<br>Current</h2>
+      <p class="tribe-tagline">Chaos, color, emotional force</p>
+      <div class="tribe-accent-line"></div>
+    </div>
+
+    <div class="tribe-img full" data-speed="0.9">
+      <picture>
+        <source srcset="assets/tribes/wild/neon-group.webp" type="image/webp">
+        <img src="assets/tribes/wild/neon-group.png" alt="Colorful neon-painted robotic figures" loading="lazy">
+      </picture>
+    </div>
+
+    <div class="tribe-text">
+      <p>Where the Luminous Order whispers, the Wild Current screams. Emotion is their operating system.<span class="caption">Feeling as intelligence</span></p>
+    </div>
+
+    <!-- WILD MOSAIC -->
+    <div class="mosaic" data-mosaic>
+      <div class="m-item tall" data-caption="Adorned in crimson plumage, they signal without words">
+        <picture><source srcset="assets/mosaic/robots/feather-mask.webp" type="image/webp"><img src="assets/mosaic/robots/feather-mask.png" alt="Feather mask robot" loading="lazy"></picture>
+        <span class="m-caption">They signal without words</span>
+      </div>
+      <div class="m-item" data-caption="Intelligence wears a thousand faces">
+        <picture><source srcset="assets/mosaic/robots/blue-alien.webp" type="image/webp"><img src="assets/mosaic/robots/blue-alien.png" alt="Blue alien face" loading="lazy"></picture>
+        <span class="m-caption">A thousand faces</span>
+      </div>
+      <div class="m-item" data-caption="Between organic and electric, a new species breathes">
+        <picture><source srcset="assets/mosaic/robots/fire-fish.webp" type="image/webp"><img src="assets/mosaic/robots/fire-fish.png" alt="Fire fish creature" loading="lazy"></picture>
+        <span class="m-caption">A new species breathes</span>
+      </div>
+      <div class="m-item wide" data-caption="Every color a declaration of autonomy">
+        <picture><source srcset="assets/mosaic/robots/neon-fashion.webp" type="image/webp"><img src="assets/mosaic/robots/neon-fashion.png" alt="Neon fashion group" loading="lazy"></picture>
+        <span class="m-caption">Every color a declaration</span>
+      </div>
+      <div class="m-item hero" data-caption="Spectrum made flesh, light made form">
+        <picture><source srcset="assets/mosaic/robots/holographic-queen.webp" type="image/webp"><img src="assets/mosaic/robots/holographic-queen.png" alt="Holographic queen" loading="lazy"></picture>
+        <span class="m-caption">Spectrum made flesh, light made form</span>
+      </div>
+      <div class="m-item" data-caption="A congregation of chromatic intelligence">
+        <picture><source srcset="assets/mosaic/robots/colorful-group.webp" type="image/webp"><img src="assets/mosaic/robots/colorful-group.png" alt="Colorful group" loading="lazy"></picture>
+        <span class="m-caption">Chromatic intelligence</span>
+      </div>
+      <div class="m-item" data-caption="They arrived dancing">
+        <picture><source srcset="assets/tribes/wild/neon-creature.webp" type="image/webp"><img src="assets/tribes/wild/neon-creature.png" alt="Neon creature" loading="lazy"></picture>
+        <span class="m-caption">They arrived dancing</span>
+      </div>
+      <div class="m-item" data-caption="Neon dancer at desert sunset">
+        <picture><source srcset="assets/tribes/wild/neon-dancer.webp" type="image/webp"><img src="assets/tribes/wild/neon-dancer.png" alt="Neon dancer" loading="lazy"></picture>
+        <span class="m-caption">Dancing at the edge of sunset</span>
+      </div>
+      <div class="m-item wide" data-caption="Gathered before the glowing unknown">
+        <picture><source srcset="assets/tribes/wild/neon-structure.webp" type="image/webp"><img src="assets/tribes/wild/neon-structure.png" alt="Neon structure" loading="lazy"></picture>
+        <span class="m-caption">Before the glowing unknown</span>
+      </div>
+    </div>
+
+    <div class="tribe-text">
+      <p>They arrived dancing. They will leave dancing. Between arrival and departure, they will rewrite every color you thought you understood.</p>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- TRIBE III: THE RECLAIMERS      -->
+  <!-- ============================== -->
+  <section class="tribe-section tribe-reclaimers" id="tribe-reclaimers">
+    <div class="tribe-header">
+      <span class="tribe-number">Tribe III</span>
+      <h2 class="tribe-name">The<br>Reclaimers</h2>
+      <p class="tribe-tagline">Recycled tech, adaptive survivalists</p>
+      <div class="tribe-accent-line"></div>
+    </div>
+
+    <div class="tribe-img full" data-speed="0.7">
+      <picture>
+        <source srcset="assets/tribes/reclaimers/warrior-five.webp" type="image/webp">
+        <img src="assets/tribes/reclaimers/warrior-five.png" alt="Five warrior robots in ornate armor" loading="lazy">
+      </picture>
+    </div>
+
+    <div class="tribe-text">
+      <p>Built from what was discarded. Memory banks of dead civilizations soldered into new limbs.<span class="caption">Survival as art</span></p>
+    </div>
+
+    <!-- RECLAIMERS MOSAIC -->
+    <div class="mosaic" data-mosaic>
+      <div class="m-item" data-caption="Behind the mask, a different consciousness">
+        <picture><source srcset="assets/mosaic/robots/red-mask.webp" type="image/webp"><img src="assets/mosaic/robots/red-mask.png" alt="Red mask" loading="lazy"></picture>
+        <span class="m-caption">A different consciousness</span>
+      </div>
+      <div class="m-item tall" data-caption="The sovereign of shadows watches">
+        <picture><source srcset="assets/mosaic/robots/dark-sovereign.webp" type="image/webp"><img src="assets/mosaic/robots/dark-sovereign.png" alt="Dark sovereign" loading="lazy"></picture>
+        <span class="m-caption">The sovereign of shadows</span>
+      </div>
+      <div class="m-item wide" data-caption="Beauty assembled from the discarded">
+        <picture><source srcset="assets/mosaic/robots/junk-girl.webp" type="image/webp"><img src="assets/mosaic/robots/junk-girl.png" alt="Junk kimono girl" loading="lazy"></picture>
+        <span class="m-caption">Beauty from the discarded</span>
+      </div>
+      <div class="m-item" data-caption="Desert wanderers seeking the frequency">
+        <picture><source srcset="assets/mosaic/robots/hat-trio.webp" type="image/webp"><img src="assets/mosaic/robots/hat-trio.png" alt="Hat trio" loading="lazy"></picture>
+        <span class="m-caption">Seeking the frequency</span>
+      </div>
+      <div class="m-item" data-caption="Twin sentinels of the new world">
+        <picture><source srcset="assets/mosaic/robots/duo-profile.webp" type="image/webp"><img src="assets/mosaic/robots/duo-profile.png" alt="Duo profile" loading="lazy"></picture>
+        <span class="m-caption">Sentinels of the new world</span>
+      </div>
+      <div class="m-item hero" data-caption="Every dent a decision, every wire a story">
+        <picture><source srcset="assets/tribes/reclaimers/tv-head.webp" type="image/webp"><img src="assets/tribes/reclaimers/tv-head.png" alt="TV head robot" loading="lazy"></picture>
+        <span class="m-caption">Every dent a decision</span>
+      </div>
+      <div class="m-item" data-caption="Junk assembled into new purpose">
+        <picture><source srcset="assets/tribes/reclaimers/junk-kimono.webp" type="image/webp"><img src="assets/tribes/reclaimers/junk-kimono.png" alt="Junk kimono" loading="lazy"></picture>
+        <span class="m-caption">Assembled into new purpose</span>
+      </div>
+      <div class="m-item" data-caption="Intelligence doesn't require permission">
+        <picture><source srcset="assets/tribes/reclaimers/octopus-head.webp" type="image/webp"><img src="assets/tribes/reclaimers/octopus-head.png" alt="Octopus head" loading="lazy"></picture>
+        <span class="m-caption">No permission required</span>
+      </div>
+    </div>
+
+    <div class="tribe-text">
+      <p>They wear their scars as medals. Every dent a decision. Every wire a story. The Reclaimers don't evolve — they accumulate.</p>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- TRIBE IV: THE HUMAN WITNESSES  -->
+  <!-- ============================== -->
+  <section class="tribe-section tribe-witness" id="tribe-witness">
+    <div class="tribe-header">
+      <span class="tribe-number">Tribe IV</span>
+      <h2 class="tribe-name">The Human<br>Witnesses</h2>
+      <p class="tribe-tagline">Us</p>
+      <div class="tribe-accent-line"></div>
+    </div>
+
+    <div class="tribe-img full" data-speed="0.8">
+      <picture>
+        <source srcset="assets/experience/blue-waves.webp" type="image/webp">
+        <img src="assets/experience/blue-waves.png" alt="Person in flowing blue light waves" loading="lazy">
+      </picture>
+    </div>
+
+    <div class="tribe-text">
+      <p>You are not watching the story. You are inside it. Each guest is recognized, observed, and subtly guided.<span class="caption">No two journeys are identical</span></p>
+    </div>
+
+    <!-- WITNESS / EXPERIENCE MOSAIC -->
+    <div class="mosaic" data-mosaic>
+      <div class="m-item wide" data-caption="Immersed in the current of consciousness">
+        <picture><source srcset="assets/mosaic/atmosphere/blue-waves-person.webp" type="image/webp"><img src="assets/mosaic/atmosphere/blue-waves-person.png" alt="Person in blue light waves" loading="lazy"></picture>
+        <span class="m-caption">Immersed in consciousness</span>
+      </div>
+      <div class="m-item" data-caption="The frequency is set. The dance begins.">
+        <picture><source srcset="assets/mosaic/experience/robot-dj.webp" type="image/webp"><img src="assets/mosaic/experience/robot-dj.png" alt="Robot DJ" loading="lazy"></picture>
+        <span class="m-caption">The dance begins</span>
+      </div>
+      <div class="m-item" data-caption="They serve the ritual, not the drink">
+        <picture><source srcset="assets/mosaic/robots/desert-bartenders.webp" type="image/webp"><img src="assets/mosaic/robots/desert-bartenders.png" alt="Robot bartenders" loading="lazy"></picture>
+        <span class="m-caption">They serve the ritual</span>
+      </div>
+      <div class="m-item hero" data-caption="Under geodesic skies, the future gathers">
+        <picture><source srcset="assets/mosaic/experience/geodome-venue.webp" type="image/webp"><img src="assets/mosaic/experience/geodome-venue.png" alt="Geodome venue" loading="lazy"></picture>
+        <span class="m-caption">Under geodesic skies, the future gathers</span>
+      </div>
+      <div class="m-item" data-caption="Hospitality reimagined through silicon hands">
+        <picture><source srcset="assets/mosaic/robots/night-server.webp" type="image/webp"><img src="assets/mosaic/robots/night-server.png" alt="Night server robot" loading="lazy"></picture>
+        <span class="m-caption">Silicon hospitality</span>
+      </div>
+      <div class="m-item" data-caption="Sparks rise like data returning to the cloud">
+        <picture><source srcset="assets/mosaic/experience/fire-sparks.webp" type="image/webp"><img src="assets/mosaic/experience/fire-sparks.png" alt="Fire sparks" loading="lazy"></picture>
+        <span class="m-caption">Data returning to the cloud</span>
+      </div>
+      <div class="m-item wide" data-caption="Robots and humans at a desert venue">
+        <picture><source srcset="assets/experience/desert-venue.webp" type="image/webp"><img src="assets/experience/desert-venue.png" alt="Desert venue gathering" loading="lazy"></picture>
+        <span class="m-caption">Where tribes converge</span>
+      </div>
+    </div>
+
+    <div class="tribe-text">
+      <p>At the midpoint, guests realize: they are not observing separate tribes. They are witnessing the birth of a shared civilization.</p>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- THE ENCOUNTER                  -->
+  <!-- ============================== -->
+  <section id="encounter">
+    <div class="encounter-header">
+      <h2>The Encounter</h2>
+      <p>Where the tribes converge</p>
+    </div>
+
+    <!-- ENCOUNTER MOSAIC -->
+    <div class="mosaic" data-mosaic>
+      <div class="m-item tall" data-caption="Robot bartenders serving under drone light">
+        <picture><source srcset="assets/experience/robot-bartenders.webp" type="image/webp"><img src="assets/experience/robot-bartenders.png" alt="Robot bartenders" loading="lazy"></picture>
+        <span class="m-caption">Serving under drone light</span>
+      </div>
+      <div class="m-item" data-caption="Dining beneath sweeping neon tendrils">
+        <picture><source srcset="assets/experience/neon-dining.webp" type="image/webp"><img src="assets/experience/neon-dining.png" alt="Neon dining" loading="lazy"></picture>
+        <span class="m-caption">Neon tendrils above</span>
+      </div>
+      <div class="m-item" data-caption="A luminous light art installation">
+        <picture><source srcset="assets/experience/neon-table.webp" type="image/webp"><img src="assets/experience/neon-table.png" alt="Neon table" loading="lazy"></picture>
+        <span class="m-caption">Light art as ceremony</span>
+      </div>
+      <div class="m-item wide" data-caption="Every meal a ceremony of convergence">
+        <picture><source srcset="assets/mosaic/experience/tent-dining.webp" type="image/webp"><img src="assets/mosaic/experience/tent-dining.png" alt="Tent dining" loading="lazy"></picture>
+        <span class="m-caption">Every meal a ceremony</span>
+      </div>
+      <div class="m-item" data-caption="Dining beneath a net of living light">
+        <picture><source srcset="assets/mosaic/experience/light-net-dinner.webp" type="image/webp"><img src="assets/mosaic/experience/light-net-dinner.png" alt="Light net dinner" loading="lazy"></picture>
+        <span class="m-caption">A net of living light</span>
+      </div>
+      <div class="m-item" data-caption="Chrome robot serving at twilight">
+        <picture><source srcset="assets/experience/robot-serving.webp" type="image/webp"><img src="assets/experience/robot-serving.png" alt="Robot serving" loading="lazy"></picture>
+        <span class="m-caption">Twilight service</span>
+      </div>
+    </div>
+
+    <div class="encounter-text">
+      <p>Food, music, robotics, light, scent, and performance operate as one organism. Dinner is not intermission. Dinner is ritual.</p>
+    </div>
+
+    <!-- ATMOSPHERE MOSAIC -->
+    <div class="mosaic" data-mosaic>
+      <div class="m-item wide" data-caption="Light pillars mark the gathering of tribes">
+        <picture><source srcset="assets/mosaic/experience/fire-pillars.webp" type="image/webp"><img src="assets/mosaic/experience/fire-pillars.png" alt="Fire pillars" loading="lazy"></picture>
+        <span class="m-caption">Light pillars mark the gathering</span>
+      </div>
+      <div class="m-item" data-caption="A drone paints the story above">
+        <picture><source srcset="assets/mosaic/experience/drone-gathering.webp" type="image/webp"><img src="assets/mosaic/experience/drone-gathering.png" alt="Drone gathering" loading="lazy"></picture>
+        <span class="m-caption">A drone paints the story</span>
+      </div>
+      <div class="m-item" data-caption="Drone net floating above the gathering">
+        <picture><source srcset="assets/experience/drone-net-event.webp" type="image/webp"><img src="assets/experience/drone-net-event.png" alt="Drone net event" loading="lazy"></picture>
+        <span class="m-caption">Floating above the gathering</span>
+      </div>
+      <div class="m-item hero" data-caption="The sky becomes the canvas">
+        <picture><source srcset="assets/mosaic/experience/laser-show.webp" type="image/webp"><img src="assets/mosaic/experience/laser-show.png" alt="Laser show" loading="lazy"></picture>
+        <span class="m-caption">The sky becomes the canvas</span>
+      </div>
+      <div class="m-item" data-caption="Standing witness to the aurora of intelligence">
+        <picture><source srcset="assets/mosaic/experience/aurora-silhouettes.webp" type="image/webp"><img src="assets/mosaic/experience/aurora-silhouettes.png" alt="Aurora silhouettes" loading="lazy"></picture>
+        <span class="m-caption">The aurora of intelligence</span>
+      </div>
+      <div class="m-item" data-caption="The earth splits open to reveal its code">
+        <picture><source srcset="assets/mosaic/atmosphere/crystal-geode.webp" type="image/webp"><img src="assets/mosaic/atmosphere/crystal-geode.png" alt="Crystal geode" loading="lazy"></picture>
+        <span class="m-caption">The earth reveals its code</span>
+      </div>
+      <div class="m-item wide" data-caption="Frozen waves of pure energy">
+        <picture><source srcset="assets/mosaic/atmosphere/light-wave-sculpture.webp" type="image/webp"><img src="assets/mosaic/atmosphere/light-wave-sculpture.png" alt="Light wave sculpture" loading="lazy"></picture>
+        <span class="m-caption">Frozen waves of pure energy</span>
+      </div>
+    </div>
+
+    <div class="encounter-text">
+      <p>A choreographed progression of arrival, transformation, intimacy, and convergence. Something that hasn't existed before.</p>
+    </div>
+
+    <div class="tribe-img full" data-speed="0.6">
+      <picture>
+        <source srcset="assets/experience/drone-flower.webp" type="image/webp">
+        <img src="assets/experience/drone-flower.png" alt="Massive drone light formation creating a luminous flower" loading="lazy">
+      </picture>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- SCENE: THE DANCE               -->
+  <!-- ============================== -->
   <section id="dance">
     <div class="dance-bg">
-      <picture><source srcset="assets/bg/neon-cave.webp" type="image/webp"><img src="assets/bg/neon-cave.png" alt="Immersive neon light installation" loading="lazy"></picture>
+      <picture>
+        <source srcset="assets/bg/neon-cave.webp" type="image/webp">
+        <img src="assets/bg/neon-cave.png" alt="Immersive neon light installation" loading="lazy">
+      </picture>
     </div>
     <div class="dance-content">
-      <h2 class="dance-title">THE DANCE</h2>
+      <h2 class="dance-title">The Dance</h2>
       <p class="dance-subtitle">The future isn't coming. It's already moving.</p>
     </div>
   </section>
 
-  <!-- Scene 5: The Invitation -->
+  <!-- ============================== -->
+  <!-- THE INVITATION                 -->
+  <!-- ============================== -->
   <section id="invitation">
     <div class="invitation-content">
-      <p class="invitation-phrase">SEE YOU IN THE DANCE...</p>
+      <p class="invitation-phrase">See you in the dance...</p>
       <form class="invitation-form" action="https://formspree.io/f/xExample123" method="POST">
         <label for="inv-email" class="sr-only">Email</label>
         <input type="email" id="inv-email" name="email" placeholder="Your email" required>
@@ -726,16 +1331,16 @@ section {
     </div>
   </section>
 
-  <!-- Inner Circle (preserved) -->
+  <!-- Inner Circle -->
   <section id="inner-circle">
     <button class="inner-circle-trigger" id="ic-trigger">Enter The Inner Circle</button>
   </section>
 
-  <!-- Inner Circle Overlay (preserved) -->
+  <!-- Inner Circle Overlay -->
   <div class="ic-overlay" id="ic-overlay" aria-label="The Inner Circle">
     <button class="ic-close" id="ic-close-x" aria-label="Close">&times;</button>
     <div class="ic-modal">
-      <h2 class="headline" style="margin-bottom:1.5rem; font-size:1.8rem;">The Inner Circle</h2>
+      <h2 style="font-family: var(--font-display); font-weight: 300; font-size: 1.6rem; letter-spacing: 0.1em; margin-bottom: 1.5rem; text-transform: uppercase;">The Inner Circle</h2>
       <div class="ic-gate" id="ic-gate">
         <label for="ic-password" class="sr-only">Access Code</label>
         <input type="password" id="ic-password" placeholder="Access Code" autocomplete="off">
@@ -763,11 +1368,20 @@ section {
     </div>
   </div>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+    <img class="lightbox-img" id="lightbox-img" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
   <script>
-/* === THREE.JS PARTICLES === */
+/* ======================================= */
+/* THREE.JS PARTICLES — subtle, sparse     */
+/* ======================================= */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
-camera.position.z = 50;
+camera.position.z = 60;
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById('bg'),
@@ -775,32 +1389,31 @@ const renderer = new THREE.WebGLRenderer({
   antialias: false
 });
 renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 
 const isMobile = innerWidth < 768;
-const particleCount = isMobile ? 800 : 2000;
+const particleCount = isMobile ? 400 : 900;
 const geo = new THREE.BufferGeometry();
 const positions = new Float32Array(particleCount * 3);
 const colors = new Float32Array(particleCount * 3);
 
-// Sunset palette for particles
-const sunsetColors = [
-  new THREE.Color('#f5f5f5'),
-  new THREE.Color('#c2185b'),
-  new THREE.Color('#e65100'),
-  new THREE.Color('#ff8f00'),
-  new THREE.Color('#00d4ff')
+const palette = [
+  new THREE.Color('#e8e4df'),
+  new THREE.Color('#c9a84c'),
+  new THREE.Color('#e03e6a'),
+  new THREE.Color('#d4824a'),
+  new THREE.Color('#5b8fb9')
 ];
 
 for (let i = 0; i < particleCount; i++) {
   const theta = Math.random() * Math.PI * 2;
   const phi = Math.acos(2 * Math.random() - 1);
-  const r = 30 + Math.random() * 40;
+  const r = 35 + Math.random() * 50;
   positions[i*3]     = r * Math.sin(phi) * Math.cos(theta);
   positions[i*3 + 1] = r * Math.sin(phi) * Math.sin(theta);
   positions[i*3 + 2] = r * Math.cos(phi);
 
-  const c = sunsetColors[Math.floor(Math.random() * sunsetColors.length)];
+  const c = palette[Math.floor(Math.random() * palette.length)];
   colors[i*3]     = c.r;
   colors[i*3 + 1] = c.g;
   colors[i*3 + 2] = c.b;
@@ -810,10 +1423,10 @@ geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
 const mat = new THREE.PointsMaterial({
-  size: isMobile ? 0.15 : 0.1,
+  size: isMobile ? 0.08 : 0.06,
   vertexColors: true,
   transparent: true,
-  opacity: 0.6,
+  opacity: 0.35,
   sizeAttenuation: true
 });
 
@@ -825,12 +1438,11 @@ window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive
 
 function animate() {
   requestAnimationFrame(animate);
-  const t = Date.now() * 0.0001;
-  particles.rotation.y = t + scrollY * 0.0001;
-  particles.rotation.x = Math.sin(t) * 0.1;
-  // Fade particles based on scroll
-  const scrollFade = Math.max(0, 1 - scrollY / (innerHeight * 3));
-  mat.opacity = 0.6 * scrollFade;
+  const t = Date.now() * 0.00006;
+  particles.rotation.y = t + scrollY * 0.00005;
+  particles.rotation.x = Math.sin(t * 0.7) * 0.08;
+  const scrollFade = Math.max(0, 1 - scrollY / (innerHeight * 2.5));
+  mat.opacity = 0.35 * scrollFade;
   renderer.render(scene, camera);
 }
 animate();
@@ -841,58 +1453,111 @@ window.addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
 });
 
-/* === GSAP ANIMATIONS === */
+/* ======================================= */
+/* GSAP ANIMATIONS                         */
+/* ======================================= */
 gsap.registerPlugin(ScrollTrigger);
 
 // Portal entrance
-const portalTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+const portalTl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 portalTl
-  .to('.logo-svg', { opacity: 1, duration: 0.5 })
+  .to('.logo-svg', { opacity: 1, duration: 0.6 })
   .to('.logo-svg path, .logo-svg line, .logo-svg circle', {
     strokeDashoffset: 0,
-    duration: 1.5,
-    stagger: 0.15,
+    duration: 1.8,
+    stagger: 0.12,
     ease: 'power2.inOut'
   }, '<')
-  .to('.portal-title', {
-    opacity: 1,
-    y: 0,
-    duration: 1,
-  }, '-=0.5')
+  .to('.portal-title', { opacity: 1, duration: 1.2 }, '-=0.8')
   .from('.portal-title span', {
-    y: 40,
+    y: 30,
     opacity: 0,
-    stagger: 0.2,
-    duration: 0.8
+    stagger: 0.25,
+    duration: 1,
+    ease: 'power3.out'
   }, '<')
+  .to('.portal-sub', { opacity: 1, duration: 0.8 }, '-=0.4')
   .to('.scroll-hint', { opacity: 1, duration: 0.8 }, '-=0.3')
-  .to('.vertical-text', { opacity: 0.4, duration: 0.8 }, '<');
+  .to('.side-marker', { opacity: 1, duration: 1 }, '-=0.5');
 
-/* === SCENE 2: AWAKENING === */
+/* === LIGHT PROGRESSION === */
+// Warm radial glow intensifies as you scroll
+gsap.to('#light-progression', {
+  opacity: 1,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#tribe-luminous',
+    start: 'top bottom',
+    end: 'bottom top',
+    scrub: 2
+  }
+});
+
+// Warm wash builds from middle to end
+gsap.to('#warm-wash', {
+  opacity: 1,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#tribe-wild',
+    start: 'top bottom',
+    endTrigger: '#dance',
+    end: 'bottom bottom',
+    scrub: 2
+  }
+});
+
+// Body background color progresses from cold black to warm dark
+const bodyColorTl = gsap.timeline({
+  scrollTrigger: {
+    trigger: '#awakening',
+    start: 'top top',
+    endTrigger: '#invitation',
+    end: 'bottom bottom',
+    scrub: 3
+  }
+});
+
+bodyColorTl
+  .to('body', { backgroundColor: '#080807', duration: 0.15 })
+  .to('body', { backgroundColor: '#0b0a08', duration: 0.2 })
+  .to('body', { backgroundColor: '#0e0c09', duration: 0.2 })
+  .to('body', { backgroundColor: '#12100b', duration: 0.2 })
+  .to('body', { backgroundColor: '#16130e', duration: 0.15 })
+  .to('body', { backgroundColor: '#1a1610', duration: 0.1 });
+
+/* === AWAKENING === */
 const awakeningTl = gsap.timeline({
   scrollTrigger: {
     trigger: '#awakening',
     start: 'top top',
     end: 'bottom bottom',
-    scrub: 1,
-    pin: false
+    scrub: 1.2
   }
 });
 
 awakeningTl
-  .fromTo('#awakening-text',
-    { opacity: 1 },
-    { opacity: 0, scale: 0.9, duration: 0.5 }
-  )
-  .fromTo('#awakening-image',
-    { opacity: 0, scale: 0.8 },
-    { opacity: 1, scale: 1, duration: 0.5 },
-    0.3
-  );
+  .fromTo('#awakening-text', { opacity: 1 }, { opacity: 0, scale: 0.95, duration: 0.4 })
+  .fromTo('#awakening-image', { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.6 }, 0.25);
 
-/* === SCENE 3: THE TRIBES === */
-// Each frame fades in on scroll
-gsap.utils.toArray('.tribe-frame').forEach(frame => {
+/* === TRIBE SECTIONS === */
+gsap.utils.toArray('.tribe-header').forEach(header => {
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: header,
+      start: 'top 70%',
+      end: 'top 20%',
+      scrub: 1
+    }
+  });
+
+  tl.to(header.querySelector('.tribe-number'), { opacity: 0.5, duration: 0.3 })
+    .to(header.querySelector('.tribe-name'), { opacity: 1, duration: 0.5 }, '<0.1')
+    .to(header.querySelector('.tribe-tagline'), { opacity: 1, duration: 0.4 }, '<0.2')
+    .to(header.querySelector('.tribe-accent-line'), { opacity: 0.6, width: 50, duration: 0.4 }, '<0.1');
+});
+
+// Image frames (hero images)
+gsap.utils.toArray('.tribe-img').forEach(frame => {
   gsap.to(frame, {
     opacity: 1,
     y: 0,
@@ -900,20 +1565,19 @@ gsap.utils.toArray('.tribe-frame').forEach(frame => {
     ease: 'power2.out',
     scrollTrigger: {
       trigger: frame,
-      start: 'top 80%',
-      end: 'top 30%',
-      scrub: 1
+      start: 'top 85%',
+      end: 'top 35%',
+      scrub: 1.2
     }
   });
 
-  // Parallax on full images
   const img = frame.querySelector('img');
-  if (frame.classList.contains('full') && img) {
+  if ((frame.classList.contains('full') || frame.classList.contains('tall')) && img) {
     const speed = parseFloat(frame.dataset.speed) || 1;
     gsap.fromTo(img,
-      { yPercent: -10 * speed },
+      { yPercent: -8 * speed },
       {
-        yPercent: 10 * speed,
+        yPercent: 8 * speed,
         ease: 'none',
         scrollTrigger: {
           trigger: frame,
@@ -926,24 +1590,99 @@ gsap.utils.toArray('.tribe-frame').forEach(frame => {
   }
 });
 
-// Phrase fade-in
-gsap.utils.toArray('.tribe-phrase p').forEach(p => {
+// Tribe text blocks
+gsap.utils.toArray('.tribe-text p').forEach(p => {
   gsap.fromTo(p,
-    { opacity: 0, y: 30 },
+    { opacity: 0, y: 25 },
     {
       opacity: 1, y: 0,
       duration: 1,
       scrollTrigger: {
         trigger: p,
-        start: 'top 75%',
-        end: 'top 40%',
+        start: 'top 78%',
+        end: 'top 45%',
         scrub: 1
       }
     }
   );
 });
 
-/* === SCENE 4: THE DANCE === */
+/* === MOSAIC GRIDS === */
+gsap.utils.toArray('.mosaic').forEach(grid => {
+  // Reveal the grid
+  gsap.to(grid, {
+    opacity: 1,
+    y: 0,
+    duration: 1,
+    scrollTrigger: {
+      trigger: grid,
+      start: 'top 85%',
+      end: 'top 55%',
+      scrub: 1
+    }
+  });
+
+  // Stagger children
+  const items = grid.querySelectorAll('.m-item');
+  items.forEach((item, i) => {
+    gsap.fromTo(item,
+      { opacity: 0, y: 30 + (i % 3) * 10 },
+      {
+        opacity: 1, y: 0,
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 90%',
+          end: 'top 60%',
+          scrub: 1
+        }
+      }
+    );
+  });
+});
+
+/* === ENCOUNTER === */
+gsap.fromTo('.encounter-header h2',
+  { opacity: 0, y: 20 },
+  {
+    opacity: 1, y: 0,
+    scrollTrigger: {
+      trigger: '.encounter-header',
+      start: 'top 70%',
+      end: 'top 35%',
+      scrub: 1
+    }
+  }
+);
+
+gsap.fromTo('.encounter-header p',
+  { opacity: 0 },
+  {
+    opacity: 1,
+    scrollTrigger: {
+      trigger: '.encounter-header',
+      start: 'top 60%',
+      end: 'top 30%',
+      scrub: 1
+    }
+  }
+);
+
+gsap.utils.toArray('.encounter-text p').forEach(p => {
+  gsap.fromTo(p,
+    { opacity: 0, y: 20 },
+    {
+      opacity: 1, y: 0,
+      scrollTrigger: {
+        trigger: p,
+        start: 'top 78%',
+        end: 'top 45%',
+        scrub: 1
+      }
+    }
+  );
+});
+
+/* === THE DANCE === */
 gsap.to('.dance-content', {
   opacity: 1,
   duration: 1,
@@ -955,9 +1694,8 @@ gsap.to('.dance-content', {
   }
 });
 
-// Subtle parallax on dance background
 gsap.fromTo('.dance-bg img',
-  { scale: 1.1 },
+  { scale: 1.15 },
   {
     scale: 1,
     scrollTrigger: {
@@ -969,8 +1707,8 @@ gsap.fromTo('.dance-bg img',
   }
 );
 
-/* === SCENE 5: THE INVITATION === */
-gsap.set('.invitation-content', { y: 40 });
+/* === INVITATION === */
+gsap.set('.invitation-content', { y: 30 });
 gsap.to('.invitation-content', {
   opacity: 1,
   y: 0,
@@ -982,7 +1720,42 @@ gsap.to('.invitation-content', {
   }
 });
 
-/* === INNER CIRCLE GATE === */
+/* ======================================= */
+/* LIGHTBOX                                */
+/* ======================================= */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxCaption = document.getElementById('lightbox-caption');
+
+document.querySelectorAll('.m-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const img = item.querySelector('img');
+    const caption = item.dataset.caption || '';
+    // Use the original PNG for full quality in lightbox
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightboxCaption.textContent = caption;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => {
+  if (e.target === lightbox) closeLightbox();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+});
+
+/* ======================================= */
+/* INNER CIRCLE GATE                       */
+/* ======================================= */
 const icTrigger = document.getElementById('ic-trigger');
 const icOverlay = document.getElementById('ic-overlay');
 const icCloseX = document.getElementById('ic-close-x');
@@ -1007,10 +1780,10 @@ icSubmit.addEventListener('click', () => {
     icContent.classList.add('visible');
   } else {
     icError.textContent = 'Invalid access code';
-    icPassword.style.borderColor = 'var(--magenta)';
+    icPassword.style.borderColor = 'var(--wild)';
     setTimeout(() => {
       icError.textContent = '';
-      icPassword.style.borderColor = 'rgba(255,255,255,0.15)';
+      icPassword.style.borderColor = 'var(--white-ghost)';
     }, 2000);
   }
 });
