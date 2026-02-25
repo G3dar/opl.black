@@ -8,6 +8,7 @@
   <meta property="og:title" content="Black Opal — The Dance">
   <meta property="og:description" content="An immersive dinner theater experience unlike anything on earth. Two stages. One civilization. One invitation.">
   <meta property="og:type" content="website">
+  <meta name="color-scheme" content="dark">
 
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'><path d='M10,50 Q60,5 110,50 Q60,95 10,50 Z' stroke='%23f5f5f5' fill='none' stroke-width='3'/><path d='M60,25 L80,50 L60,75 L40,50 Z' stroke='%23f5f5f5' fill='none' stroke-width='2'/></svg>">
@@ -44,7 +45,7 @@
   --sunset-5: #ff8f00;
 }
 
-html { scroll-behavior: smooth; }
+html { /* no scroll-behavior: smooth - conflicts with GSAP ScrollTrigger */ }
 
 body {
   background: var(--black);
@@ -68,7 +69,7 @@ body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 999;
+  z-index: 50;
   pointer-events: none;
   opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -89,6 +90,17 @@ body::after {
   white-space: nowrap;
   z-index: 10;
   opacity: 0;
+}
+
+/* === Screen Reader Only === */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* === Sections Base === */
@@ -122,15 +134,14 @@ section {
   z-index: 1;
   background: linear-gradient(
     180deg,
-    #0a0a0a 0%,
-    #1a0a15 15%,
-    #4a1942 30%,
-    #8b1a4a 45%,
-    #c2185b 55%,
-    #e65100 70%,
-    #ff8f00 85%,
-    #e65100 95%,
-    #1a0a15 100%
+    var(--black) 0%,
+    var(--sunset-1) 15%,
+    var(--sunset-2) 40%,
+    var(--sunset-3) 55%,
+    var(--sunset-4) 70%,
+    var(--sunset-5) 85%,
+    var(--sunset-4) 95%,
+    var(--sunset-1) 100%
   );
   opacity: 0.6;
 }
@@ -253,6 +264,11 @@ section {
   height: 100vh;
 }
 
+.tribe-frame.full picture {
+  width: 100%;
+  height: 100%;
+}
+
 .tribe-frame.full img {
   width: 100%;
   height: 100%;
@@ -264,6 +280,12 @@ section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
+}
+
+.tribe-frame.split picture {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .tribe-frame.split img {
@@ -291,6 +313,7 @@ section {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
 
 /* ==================== */
@@ -632,7 +655,7 @@ section {
     <div class="awakening-sticky">
       <p class="awakening-text" id="awakening-text">An intelligent species has been evolving beside us...</p>
       <div class="awakening-image" id="awakening-image">
-        <img src="assets/robots/tribes-desert-duo.png" alt="Two robotic figures in desert landscape" loading="lazy">
+        <picture><source srcset="assets/robots/tribes-desert-duo.webp" type="image/webp"><img src="assets/robots/tribes-desert-duo.png" alt="Two robotic figures in desert landscape" loading="lazy"></picture>
       </div>
     </div>
   </section>
@@ -642,7 +665,7 @@ section {
     <div class="tribes-flow">
 
       <div class="tribe-frame full" data-speed="0.8">
-        <img src="assets/robots/tribes-fashion-lineup.png" alt="Robotic figures in ornate fashion" loading="lazy">
+        <picture><source srcset="assets/robots/tribes-fashion-lineup.webp" type="image/webp"><img src="assets/robots/tribes-fashion-lineup.png" alt="Robotic figures in ornate fashion" loading="lazy"></picture>
       </div>
 
       <div class="tribe-phrase">
@@ -650,8 +673,8 @@ section {
       </div>
 
       <div class="tribe-frame split">
-        <img src="assets/robots/tribes-floral-group.png" alt="Floral-adorned robotic tribe" loading="lazy" class="split-left">
-        <img src="assets/robots/tribes-opal-closeup.png" alt="Close-up of opalescent robots" loading="lazy" class="split-right">
+        <picture><source srcset="assets/robots/tribes-floral-group.webp" type="image/webp"><img src="assets/robots/tribes-floral-group.png" alt="Floral-adorned robotic tribe" loading="lazy" class="split-left"></picture>
+        <picture><source srcset="assets/robots/tribes-opal-closeup.webp" type="image/webp"><img src="assets/robots/tribes-opal-closeup.png" alt="Close-up of opalescent robots" loading="lazy" class="split-right"></picture>
       </div>
 
       <div class="tribe-phrase">
@@ -659,7 +682,7 @@ section {
       </div>
 
       <div class="tribe-frame full" data-speed="1.2">
-        <img src="assets/robots/tribes-masked-four.png" alt="Four masked robotic figures" loading="lazy">
+        <picture><source srcset="assets/robots/tribes-masked-four.webp" type="image/webp"><img src="assets/robots/tribes-masked-four.png" alt="Four masked robotic figures" loading="lazy"></picture>
       </div>
 
       <div class="tribe-phrase">
@@ -667,12 +690,12 @@ section {
       </div>
 
       <div class="tribe-frame full" data-speed="0.9">
-        <img src="assets/robots/tribes-creature.png" alt="Hybrid creature figure" loading="lazy">
+        <picture><source srcset="assets/robots/tribes-creature.webp" type="image/webp"><img src="assets/robots/tribes-creature.png" alt="Hybrid creature figure" loading="lazy"></picture>
       </div>
 
       <div class="tribe-frame split">
-        <img src="assets/robots/tribes-wide-group.png" alt="Wide shot of robotic tribe" loading="lazy" class="split-left">
-        <img src="assets/robots/tribes-detail.png" alt="Detailed robot craftsmanship" loading="lazy" class="split-right">
+        <picture><source srcset="assets/robots/tribes-wide-group.webp" type="image/webp"><img src="assets/robots/tribes-wide-group.png" alt="Wide shot of robotic tribe" loading="lazy" class="split-left"></picture>
+        <picture><source srcset="assets/robots/tribes-detail.webp" type="image/webp"><img src="assets/robots/tribes-detail.png" alt="Detailed robot craftsmanship" loading="lazy" class="split-right"></picture>
       </div>
 
     </div>
@@ -681,7 +704,7 @@ section {
   <!-- Scene 4: The Dance -->
   <section id="dance">
     <div class="dance-bg">
-      <img src="assets/bg/neon-cave.png" alt="Immersive neon light installation" loading="lazy">
+      <picture><source srcset="assets/bg/neon-cave.webp" type="image/webp"><img src="assets/bg/neon-cave.png" alt="Immersive neon light installation" loading="lazy"></picture>
     </div>
     <div class="dance-content">
       <h2 class="dance-title">THE DANCE</h2>
@@ -694,8 +717,10 @@ section {
     <div class="invitation-content">
       <p class="invitation-phrase">SEE YOU IN THE DANCE...</p>
       <form class="invitation-form" action="https://formspree.io/f/xExample123" method="POST">
-        <input type="email" name="email" placeholder="Your email" required>
-        <textarea name="message" rows="2" placeholder="Message (optional)"></textarea>
+        <label for="inv-email" class="sr-only">Email</label>
+        <input type="email" id="inv-email" name="email" placeholder="Your email" required>
+        <label for="inv-message" class="sr-only">Message</label>
+        <textarea id="inv-message" name="message" rows="2" placeholder="Message (optional)"></textarea>
         <button type="submit">Request Access</button>
       </form>
     </div>
@@ -712,6 +737,7 @@ section {
     <div class="ic-modal">
       <h2 class="headline" style="margin-bottom:1.5rem; font-size:1.8rem;">The Inner Circle</h2>
       <div class="ic-gate" id="ic-gate">
+        <label for="ic-password" class="sr-only">Access Code</label>
         <input type="password" id="ic-password" placeholder="Access Code" autocomplete="off">
         <p class="ic-error-msg" id="ic-error"></p>
         <button id="ic-submit">Enter</button>
