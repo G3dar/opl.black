@@ -784,6 +784,212 @@
       background: var(--white);
       color: var(--black);
     }
+
+    /* === Inner Circle === */
+    #inner-circle {
+      min-height: 40vh;
+      padding: 4rem 2rem;
+    }
+
+    .inner-circle-trigger {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(245, 245, 245, 0.35);
+      border: 1px solid rgba(245, 245, 245, 0.15);
+      background: transparent;
+      padding: 0.7rem 2rem;
+      cursor: pointer;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .inner-circle-trigger:hover {
+      color: rgba(245, 245, 245, 0.7);
+      border-color: rgba(245, 245, 245, 0.4);
+    }
+
+    /* Overlay */
+    .ic-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .ic-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .ic-overlay-inner {
+      max-width: 550px;
+      width: 90%;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .ic-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: none;
+      border: none;
+      color: rgba(245, 245, 245, 0.5);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .ic-close:hover {
+      color: var(--white);
+    }
+
+    /* Gate (password form) */
+    .ic-gate {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .ic-gate input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(245, 245, 245, 0.3);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      padding: 0.8rem 0;
+      text-align: center;
+      outline: none;
+      width: 250px;
+      transition: border-color 0.3s;
+    }
+
+    .ic-gate input:focus {
+      border-bottom-color: var(--gold);
+    }
+
+    .ic-gate input.ic-error {
+      border-bottom-color: #e53935;
+    }
+
+    .ic-gate .ic-error-msg {
+      color: #e53935;
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      min-height: 1.2em;
+    }
+
+    .ic-gate button {
+      background: transparent;
+      border: 1px solid rgba(245, 245, 245, 0.5);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.6rem 2.5rem;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .ic-gate button:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* Inner Circle Content (shown after correct password) */
+    .ic-content {
+      display: none;
+    }
+
+    .ic-content.visible {
+      display: block;
+    }
+
+    .ic-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    .ic-cards {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .ic-card {
+      border: 1px solid rgba(245, 245, 245, 0.15);
+      border-radius: 6px;
+      padding: 1.5rem 2rem;
+      flex: 1;
+      min-width: 200px;
+      max-width: 250px;
+    }
+
+    .ic-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .ic-card a {
+      color: var(--gold);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+
+    .ic-card a:hover {
+      color: var(--white);
+    }
+
+    .ic-video-placeholder {
+      border: 1px solid rgba(245, 245, 245, 0.15);
+      border-radius: 6px;
+      padding: 3rem 2rem;
+      color: rgba(245, 245, 245, 0.4);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+    }
+
+    .ic-content .ic-close-btn {
+      background: transparent;
+      border: 1px solid rgba(245, 245, 245, 0.3);
+      color: rgba(245, 245, 245, 0.6);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.5rem 2rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .ic-content .ic-close-btn:hover {
+      color: var(--white);
+      border-color: rgba(245, 245, 245, 0.6);
+    }
   </style>
 </head>
 <body>
@@ -971,7 +1177,38 @@
       </form>
     </div>
   </section>
-  <section id="inner-circle"></section>
+  <section id="inner-circle">
+    <button class="inner-circle-trigger" id="ic-trigger">Enter The Inner Circle</button>
+  </section>
+
+  <!-- Inner Circle Overlay -->
+  <div class="ic-overlay" id="ic-overlay" aria-label="The Inner Circle — gated content">
+    <button class="ic-close" id="ic-close-x" aria-label="Close">&times;</button>
+    <div class="ic-overlay-inner">
+      <!-- Password Gate -->
+      <div class="ic-gate" id="ic-gate">
+        <input type="password" id="ic-password" placeholder="Access Code" autocomplete="off">
+        <p class="ic-error-msg" id="ic-error"></p>
+        <button id="ic-submit">Enter</button>
+      </div>
+      <!-- Content (hidden until correct password) -->
+      <div class="ic-content" id="ic-content">
+        <h2>The Inner Circle</h2>
+        <div class="ic-cards">
+          <div class="ic-card">
+            <h3>The Table — Full Deck</h3>
+            <a href="#">Download PDF</a>
+          </div>
+          <div class="ic-card">
+            <h3>The Horizon — Full Deck</h3>
+            <a href="#">Download PDF</a>
+          </div>
+        </div>
+        <div class="ic-video-placeholder">Video coming soon</div>
+        <button class="ic-close-btn" id="ic-close-btn">Close</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // =============================================
@@ -1512,6 +1749,56 @@
       ease: 'power2.out',
       scrollTrigger: { trigger: '#contact', start: 'top 80%' }
     });
+
+    // =============================================
+    // Inner Circle — Password gate
+    // =============================================
+    (function() {
+      const overlay = document.getElementById('ic-overlay');
+      const gate = document.getElementById('ic-gate');
+      const content = document.getElementById('ic-content');
+      const pwInput = document.getElementById('ic-password');
+      const errorMsg = document.getElementById('ic-error');
+      const PASSWORD = 'blackopal2026';
+
+      function openOverlay() {
+        overlay.classList.add('active');
+        gate.style.display = '';
+        content.classList.remove('visible');
+        pwInput.value = '';
+        errorMsg.textContent = '';
+        pwInput.classList.remove('ic-error');
+        setTimeout(() => pwInput.focus(), 100);
+      }
+
+      function closeOverlay() {
+        overlay.classList.remove('active');
+      }
+
+      function checkPassword() {
+        if (pwInput.value === PASSWORD) {
+          gate.style.display = 'none';
+          content.classList.add('visible');
+        } else {
+          pwInput.classList.add('ic-error');
+          errorMsg.textContent = 'Invalid access code';
+          setTimeout(() => {
+            pwInput.classList.remove('ic-error');
+          }, 1500);
+        }
+      }
+
+      document.getElementById('ic-trigger').addEventListener('click', openOverlay);
+      document.getElementById('ic-close-x').addEventListener('click', closeOverlay);
+      document.getElementById('ic-close-btn').addEventListener('click', closeOverlay);
+      document.getElementById('ic-submit').addEventListener('click', checkPassword);
+      pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+
+      // Close on backdrop click
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) closeOverlay();
+      });
+    })();
   </script>
 
 </body>
