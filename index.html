@@ -335,6 +335,102 @@
       font-weight: 300;
       color: rgba(245, 245, 245, 0.65);
     }
+
+    /* === Fork === */
+    #fork {
+      height: 150vh;
+      min-height: auto;
+      align-items: flex-start;
+    }
+
+    .fork-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .fork-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 700;
+      text-align: center;
+      opacity: 0;
+    }
+
+    .fork-panels {
+      display: flex;
+      width: 100%;
+      max-width: 1000px;
+      height: 50vh;
+      gap: 0;
+      position: relative;
+    }
+
+    .fork-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2rem;
+      position: relative;
+      opacity: 0;
+    }
+
+    .fork-panel--table {
+      background: radial-gradient(ellipse at center, rgba(255, 171, 0, 0.12) 0%, rgba(194, 24, 91, 0.06) 50%, transparent 80%);
+    }
+
+    .fork-panel--horizon {
+      background: radial-gradient(ellipse at center, rgba(26, 35, 126, 0.15) 0%, rgba(176, 190, 197, 0.06) 50%, transparent 80%);
+    }
+
+    .fork-panel h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      opacity: 0;
+    }
+
+    .fork-panel .fork-teaser {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+      color: rgba(245, 245, 245, 0.6);
+      opacity: 0;
+    }
+
+    .fork-divider {
+      position: absolute;
+      left: 50%;
+      top: 15%;
+      bottom: 15%;
+      width: 1px;
+      background: rgba(245, 245, 245, 0.25);
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .fork-divider::after {
+      content: '\25C6';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.6rem;
+      color: rgba(245, 245, 245, 0.4);
+      background: var(--black);
+      padding: 0.3rem;
+    }
   </style>
 </head>
 <body>
@@ -425,7 +521,22 @@
       </div>
     </div>
   </section>
-  <section id="fork"></section>
+  <section id="fork">
+    <div class="fork-sticky">
+      <h2 class="fork-title">Two Stages. One Dance.</h2>
+      <div class="fork-panels">
+        <div class="fork-panel fork-panel--table">
+          <h3>THE TABLE</h3>
+          <p class="fork-teaser">The intimate ritual.</p>
+        </div>
+        <div class="fork-divider"></div>
+        <div class="fork-panel fork-panel--horizon">
+          <h3>THE HORIZON</h3>
+          <p class="fork-teaser">The elemental expanse.</p>
+        </div>
+      </div>
+    </div>
+  </section>
   <section id="table"></section>
   <section id="horizon"></section>
   <section id="encounter"></section>
@@ -828,6 +939,35 @@
         onEnter: () => { tribesVisible = true; },
         once: true
       });
+    })();
+
+    // =============================================
+    // Fork — Visual divergence
+    // =============================================
+    (function() {
+      const forkTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#fork',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1
+        }
+      });
+
+      // Title fades in first
+      forkTl.to('.fork-title', { opacity: 1, duration: 1 })
+        // Panels slide apart from center (start overlapping via translateX)
+        .fromTo('.fork-panel--table',
+          { opacity: 0, x: 80 },
+          { opacity: 1, x: 0, duration: 1.5 }, '-=0.3'
+        )
+        .fromTo('.fork-panel--horizon',
+          { opacity: 0, x: -80 },
+          { opacity: 1, x: 0, duration: 1.5 }, '<'
+        )
+        // Labels and teaser text fade in after panels settle
+        .to('.fork-panel h3', { opacity: 1, duration: 0.8, stagger: 0.2 })
+        .to('.fork-teaser', { opacity: 1, duration: 0.8, stagger: 0.2 }, '-=0.5');
     })();
   </script>
 
