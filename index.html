@@ -109,5 +109,131 @@
   <section id="contact"></section>
   <section id="inner-circle"></section>
 
+  <script>
+    // =============================================
+    // GSAP ScrollTrigger Registration
+    // =============================================
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Global scroll progress (0-1) for particle color shifts
+    let scrollProgress = 0;
+    ScrollTrigger.create({
+      trigger: 'body',
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: self => { scrollProgress = self.progress; }
+    });
+
+    // =============================================
+    // Three.js Particle Background
+    // =============================================
+    (function() {
+      const canvas = document.getElementById('bg');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
+      camera.position.z = 50;
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        alpha: true,
+        antialias: true
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Particle count — reduced on low-end devices
+      const PARTICLE_COUNT = (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) ? 1500 : 3000;
+
+      // Create particles in a sphere distribution
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(PARTICLE_COUNT * 3);
+      const colors = new Float32Array(PARTICLE_COUNT * 3);
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        // Random point in sphere (radius ~50)
+        const radius = 50 * Math.cbrt(Math.random());
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+
+        positions[i * 3]     = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        positions[i * 3 + 2] = radius * Math.cos(phi);
+
+        // Start white
+        colors[i * 3]     = 1.0;
+        colors[i * 3 + 1] = 1.0;
+        colors[i * 3 + 2] = 1.0;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.6,
+        size: 0.08,
+        sizeAttenuation: true
+      });
+
+      const points = new THREE.Points(geometry, material);
+      scene.add(points);
+
+      // Color palette for scroll interpolation
+      const colorStops = [
+        new THREE.Color(0xf5f5f5), // white
+        new THREE.Color(0xc2185b), // magenta
+        new THREE.Color(0xe65100), // orange
+        new THREE.Color(0xffab00)  // gold
+      ];
+
+      function lerpColor(progress) {
+        const scaledP = progress * (colorStops.length - 1);
+        const idx = Math.min(Math.floor(scaledP), colorStops.length - 2);
+        const t = scaledP - idx;
+        const c = new THREE.Color();
+        c.lerpColors(colorStops[idx], colorStops[idx + 1], t);
+        return c;
+      }
+
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Gentle rotation
+        points.rotation.y += 0.0003;
+        points.rotation.x += 0.0001;
+
+        // Update colors based on scroll progress
+        const baseColor = lerpColor(scrollProgress);
+        const colAttr = geometry.getAttribute('color');
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          // Slight per-particle variation for organic feel
+          const variation = 0.9 + Math.sin(i * 0.1 + scrollProgress * 5) * 0.1;
+          colAttr.array[i * 3]     = baseColor.r * variation;
+          colAttr.array[i * 3 + 1] = baseColor.g * variation;
+          colAttr.array[i * 3 + 2] = baseColor.b * variation;
+        }
+        colAttr.needsUpdate = true;
+
+        // Slight scale shift with scroll (geometry spreads out)
+        const scale = 1 + scrollProgress * 0.3;
+        points.scale.set(scale, scale, scale);
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Resize handler
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      });
+    })();
+  </script>
+
 </body>
 </html>
