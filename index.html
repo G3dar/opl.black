@@ -266,6 +266,75 @@
       opacity: 0;
       text-shadow: 0 0 0px transparent;
     }
+
+    /* === Tribes === */
+    #tribes {
+      flex-direction: column;
+      padding: 6rem 2rem;
+      gap: 3rem;
+    }
+
+    .tribes-header {
+      text-align: center;
+      max-width: 700px;
+      opacity: 0;
+    }
+
+    .tribes-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .tribes-header p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+      font-weight: 300;
+      color: rgba(245, 245, 245, 0.7);
+    }
+
+    .tribes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .tribe-card {
+      border: 1px solid rgba(245, 245, 245, 0.12);
+      border-radius: 8px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      text-align: center;
+      background: rgba(10, 10, 10, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .tribe-card canvas {
+      border-radius: 50%;
+    }
+
+    .tribe-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .tribe-card p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(245, 245, 245, 0.65);
+    }
   </style>
 </head>
 <body>
@@ -328,7 +397,34 @@
       </div>
     </div>
   </section>
-  <section id="tribes"></section>
+  <section id="tribes">
+    <div class="tribes-header">
+      <h2>Four Tribes. Four Expressions of Intelligence.</h2>
+      <p>Each represents a different philosophy of evolution.</p>
+    </div>
+    <div class="tribes-grid">
+      <div class="tribe-card" data-tribe="luminous">
+        <canvas width="200" height="200"></canvas>
+        <h3>The Luminous Order</h3>
+        <p>Elegance, symmetry, perfection</p>
+      </div>
+      <div class="tribe-card" data-tribe="wild">
+        <canvas width="200" height="200"></canvas>
+        <h3>The Wild Current</h3>
+        <p>Chaos, color, emotional force</p>
+      </div>
+      <div class="tribe-card" data-tribe="reclaimers">
+        <canvas width="200" height="200"></canvas>
+        <h3>The Reclaimers</h3>
+        <p>Recycled tech, adaptive survivalists</p>
+      </div>
+      <div class="tribe-card" data-tribe="witnesses">
+        <canvas width="200" height="200"></canvas>
+        <h3>The Human Witnesses</h3>
+        <p>Us</p>
+      </div>
+    </div>
+  </section>
   <section id="fork"></section>
   <section id="table"></section>
   <section id="horizon"></section>
@@ -573,6 +669,165 @@
           textShadow: '0 0 30px rgba(255, 171, 0, 0.4)',
           duration: 1.2
         });
+    })();
+
+    // =============================================
+    // Tribes — Scroll entrance + generative canvas visuals
+    // =============================================
+    (function() {
+      // Scroll entrance
+      gsap.to('.tribes-header', {
+        opacity: 1,
+        duration: 1,
+        scrollTrigger: { trigger: '#tribes', start: 'top 80%', scrub: false }
+      });
+
+      gsap.to('.tribe-card', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: '.tribes-grid', start: 'top 85%', scrub: false }
+      });
+
+      // --- Tribe canvas animations ---
+      const tribeAnimations = {};
+      let tribesVisible = false;
+
+      // The Luminous Order: concentric circles, white/gold, slow pulse
+      tribeAnimations.luminous = function(ctx, w, h, t) {
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2;
+        const pulse = 0.8 + Math.sin(t * 0.002) * 0.2;
+        for (let i = 6; i >= 1; i--) {
+          const r = (i / 6) * 80 * pulse;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          const alpha = 0.1 + (i / 6) * 0.3;
+          ctx.strokeStyle = i % 2 === 0
+            ? `rgba(255, 171, 0, ${alpha})`
+            : `rgba(245, 245, 245, ${alpha})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        // Radiating lines
+        for (let a = 0; a < Math.PI * 2; a += Math.PI / 6) {
+          const angle = a + t * 0.0003;
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(angle) * 20, cy + Math.sin(angle) * 20);
+          ctx.lineTo(cx + Math.cos(angle) * 85 * pulse, cy + Math.sin(angle) * 85 * pulse);
+          ctx.strokeStyle = 'rgba(255, 171, 0, 0.15)';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      };
+
+      // The Wild Current: chaotic bouncing dots, magenta/orange/cyan
+      const wildDots = [];
+      for (let i = 0; i < 60; i++) {
+        wildDots.push({
+          x: Math.random() * 200,
+          y: Math.random() * 200,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          color: ['#c2185b', '#e65100', '#00bcd4'][Math.floor(Math.random() * 3)],
+          size: 2 + Math.random() * 3
+        });
+      }
+      tribeAnimations.wild = function(ctx, w, h, t) {
+        ctx.clearRect(0, 0, w, h);
+        wildDots.forEach(d => {
+          d.x += d.vx;
+          d.y += d.vy;
+          if (d.x < 0 || d.x > w) d.vx *= -1;
+          if (d.y < 0 || d.y > h) d.vy *= -1;
+          // Swirl influence
+          const cx = w / 2, cy = h / 2;
+          const dx = cx - d.x, dy = cy - d.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          d.vx += (-dy / dist) * 0.02;
+          d.vy += (dx / dist) * 0.02;
+          // Clamp velocity
+          const speed = Math.sqrt(d.vx * d.vx + d.vy * d.vy);
+          if (speed > 2.5) { d.vx *= 2.5 / speed; d.vy *= 2.5 / speed; }
+
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+          ctx.fillStyle = d.color;
+          ctx.globalAlpha = 0.7;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        });
+      };
+
+      // The Reclaimers: grid of squares that glitch and rearrange
+      tribeAnimations.reclaimers = function(ctx, w, h, t) {
+        ctx.clearRect(0, 0, w, h);
+        const gridSize = 8;
+        const cellW = w / gridSize, cellH = h / gridSize;
+        for (let gx = 0; gx < gridSize; gx++) {
+          for (let gy = 0; gy < gridSize; gy++) {
+            // Glitch offset
+            const glitch = Math.sin(t * 0.003 + gx * 3.7 + gy * 2.1) > 0.7;
+            const ox = glitch ? (Math.random() - 0.5) * 8 : 0;
+            const oy = glitch ? (Math.random() - 0.5) * 8 : 0;
+            const x = gx * cellW + 4 + ox;
+            const y = gy * cellH + 4 + oy;
+            const s = cellW - 8;
+            const g = glitch ? 180 + Math.random() * 75 : 100 + Math.random() * 40;
+            ctx.fillStyle = `rgba(${Math.floor(g * 0.4)}, ${Math.floor(g)}, ${Math.floor(g * 0.5)}, ${0.3 + Math.random() * 0.3})`;
+            ctx.fillRect(x, y, s, s);
+          }
+        }
+      };
+
+      // The Human Witnesses: soft breathing circle, organic warmth
+      tribeAnimations.witnesses = function(ctx, w, h, t) {
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2;
+        const breath = 1 + Math.sin(t * 0.0015) * 0.15;
+        const r = 60 * breath;
+        // Warm gradient
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        grad.addColorStop(0, 'rgba(210, 160, 130, 0.4)');
+        grad.addColorStop(0.6, 'rgba(180, 120, 100, 0.15)');
+        grad.addColorStop(1, 'rgba(150, 100, 80, 0)');
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        // Subtle ring
+        ctx.beginPath();
+        ctx.arc(cx, cy, r * 0.85, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(210, 160, 130, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      };
+
+      // Animation loop for all tribe canvases
+      const cards = document.querySelectorAll('.tribe-card');
+      function animateTribes(t) {
+        if (!tribesVisible) { requestAnimationFrame(animateTribes); return; }
+        cards.forEach(card => {
+          const tribe = card.dataset.tribe;
+          const canvas = card.querySelector('canvas');
+          const ctx = canvas.getContext('2d');
+          if (tribeAnimations[tribe]) {
+            tribeAnimations[tribe](ctx, canvas.width, canvas.height, t);
+          }
+        });
+        requestAnimationFrame(animateTribes);
+      }
+      requestAnimationFrame(animateTribes);
+
+      // Start animations when section enters viewport
+      ScrollTrigger.create({
+        trigger: '#tribes',
+        start: 'top 90%',
+        onEnter: () => { tribesVisible = true; },
+        once: true
+      });
     })();
   </script>
 
