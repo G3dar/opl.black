@@ -541,6 +541,90 @@
       text-shadow: 0 0 20px rgba(255, 171, 0, 0.15);
       margin-bottom: 0.8rem;
     }
+
+    /* === The Horizon === */
+    #horizon {
+      height: 250vh;
+      min-height: auto;
+      align-items: flex-start;
+    }
+
+    .horizon-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .horizon-content {
+      max-width: 900px;
+      padding: 2rem;
+      width: 100%;
+    }
+
+    .horizon-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0;
+    }
+
+    .horizon-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--silver);
+      text-shadow: 0 0 40px rgba(26, 35, 126, 0.3);
+    }
+
+    .horizon-header .horizon-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+      color: rgba(245, 245, 245, 0.5);
+      margin-top: 0.5rem;
+    }
+
+    .horizon-intro {
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0;
+    }
+
+    .horizon-theme {
+      margin-bottom: 2.5rem;
+      opacity: 0;
+    }
+
+    .horizon-theme .theme-keyword {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      color: var(--silver);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .horizon-theme .theme-desc {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      color: rgba(245, 245, 245, 0.6);
+    }
+
+    .horizon-closing {
+      text-align: center;
+      margin-top: 2rem;
+      opacity: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.85rem, 1.2vw, 1rem);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      color: var(--silver);
+    }
   </style>
 </head>
 <body>
@@ -672,7 +756,30 @@
       </div>
     </div>
   </section>
-  <section id="horizon"></section>
+  <section id="horizon">
+    <div class="horizon-sticky">
+      <div class="horizon-content">
+        <div class="horizon-header">
+          <h2>THE HORIZON</h2>
+          <p class="horizon-subtitle">The Elemental Expanse</p>
+        </div>
+        <p class="body-text horizon-intro">The expansive format. Open landscape. Tribes arriving across terrain. An environmental spectacle at scale where the boundaries between audience, performer, and environment dissolve entirely.</p>
+        <div class="horizon-theme horizon-theme-1">
+          <div class="theme-keyword">Scale</div>
+          <p class="theme-desc">"Where the landscape becomes the stage."</p>
+        </div>
+        <div class="horizon-theme horizon-theme-2">
+          <div class="theme-keyword">Encounter</div>
+          <p class="theme-desc">"Tribes emerge from the horizon. You see them before you hear them."</p>
+        </div>
+        <div class="horizon-theme horizon-theme-3">
+          <div class="theme-keyword">Transformation</div>
+          <p class="theme-desc">"Under open sky, the boundaries dissolve entirely."</p>
+        </div>
+        <p class="horizon-closing">No walls. No ceiling. No separation.</p>
+      </div>
+    </div>
+  </section>
   <section id="encounter"></section>
   <section id="contact"></section>
   <section id="inner-circle"></section>
@@ -1133,6 +1240,40 @@
         }, '-=1.5')
         // Closing quotes
         .to('.table-quote', { opacity: 1, duration: 1 });
+    })();
+
+    // =============================================
+    // The Horizon — Desert experience themes
+    // =============================================
+    (function() {
+      const horizonTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#horizon',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1
+        }
+      });
+
+      // Header fades in with cool glow
+      horizonTl.to('.horizon-header', { opacity: 1, duration: 1 })
+        // Intro
+        .to('.horizon-intro', { opacity: 1, duration: 0.8 })
+        // Theme blocks slide in from alternating sides
+        .fromTo('.horizon-theme-1',
+          { opacity: 0, x: -80 },
+          { opacity: 1, x: 0, duration: 1 }
+        )
+        .fromTo('.horizon-theme-2',
+          { opacity: 0, x: 80 },
+          { opacity: 1, x: 0, duration: 1 }
+        )
+        .fromTo('.horizon-theme-3',
+          { opacity: 0, x: -80 },
+          { opacity: 1, x: 0, duration: 1 }
+        )
+        // Closing statement
+        .to('.horizon-closing', { opacity: 1, duration: 1 });
     })();
   </script>
 
