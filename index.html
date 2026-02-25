@@ -431,6 +431,116 @@
       background: var(--black);
       padding: 0.3rem;
     }
+
+    /* === The Table === */
+    #table {
+      height: 300vh;
+      min-height: auto;
+      align-items: flex-start;
+    }
+
+    .table-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .table-content {
+      max-width: 750px;
+      padding: 2rem;
+      width: 100%;
+    }
+
+    .table-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      opacity: 0;
+    }
+
+    .table-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-shadow: 0 0 40px rgba(255, 171, 0, 0.2);
+    }
+
+    .table-header .table-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+      color: rgba(245, 245, 245, 0.6);
+      margin-top: 0.5rem;
+    }
+
+    .table-intro {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+    }
+
+    .table-timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .table-timeline-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--gold);
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+
+    .timeline-step {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      transform: translateY(15px);
+    }
+
+    .timeline-step .step-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      min-width: 110px;
+      flex-shrink: 0;
+    }
+
+    .timeline-step .step-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(245, 245, 245, 0.7);
+      line-height: 1.5;
+    }
+
+    .table-quote {
+      text-align: center;
+      margin-top: 2.5rem;
+      opacity: 0;
+    }
+
+    .table-quote p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(255, 171, 0, 0.15);
+      margin-bottom: 0.8rem;
+    }
   </style>
 </head>
 <body>
@@ -537,7 +647,31 @@
       </div>
     </div>
   </section>
-  <section id="table"></section>
+  <section id="table">
+    <div class="table-sticky">
+      <div class="table-content">
+        <div class="table-header">
+          <h2>THE TABLE</h2>
+          <p class="table-subtitle">The Intimate Ritual</p>
+        </div>
+        <p class="body-text table-intro">An ultra-luxury immersive dinner for 100 guests. Not a show. Not a concert. Not a gala. A choreographed progression where food, music, robotics, light, scent, and performance operate as one organism.</p>
+        <div class="table-timeline">
+          <div class="table-timeline-line"></div>
+          <div class="timeline-step"><span class="step-label">I. The Journey</span><span class="step-desc">Guests depart the ordinary world. The transition begins before they arrive.</span></div>
+          <div class="timeline-step"><span class="step-label">II. Arrival</span><span class="step-desc">The environment reads you. Subtle signals shape how the night unfolds.</span></div>
+          <div class="timeline-step"><span class="step-label">III. Reception</span><span class="step-desc">First encounters with the tribes. Alliances form over cocktails.</span></div>
+          <div class="timeline-step"><span class="step-label">IV. Dinner</span><span class="step-desc">Every course unfolds as part of the story. The table is where civilizations meet.</span></div>
+          <div class="timeline-step"><span class="step-label">V. Show</span><span class="step-desc">What felt intimate becomes collective. Light, sound, and movement align into a single gesture.</span></div>
+          <div class="timeline-step"><span class="step-label">VI. Chill</span><span class="step-desc">The tension dissolves. Conversations deepen. The experience breathes.</span></div>
+          <div class="timeline-step"><span class="step-label">VII. Journey Back</span><span class="step-desc">Return to the world, changed. No two guests leave with the same story.</span></div>
+        </div>
+        <div class="table-quote">
+          <p>"Dinner is not intermission. Dinner is ritual."</p>
+          <p>"Technology amplifies hospitality, it does not replace it."</p>
+        </div>
+      </div>
+    </div>
+  </section>
   <section id="horizon"></section>
   <section id="encounter"></section>
   <section id="contact"></section>
@@ -968,6 +1102,37 @@
         // Labels and teaser text fade in after panels settle
         .to('.fork-panel h3', { opacity: 1, duration: 0.8, stagger: 0.2 })
         .to('.fork-teaser', { opacity: 1, duration: 0.8, stagger: 0.2 }, '-=0.5');
+    })();
+
+    // =============================================
+    // The Table — 7-movement timeline
+    // =============================================
+    (function() {
+      const tableTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#table',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1
+        }
+      });
+
+      // Header fades in with warm glow
+      tableTl.to('.table-header', { opacity: 1, duration: 1 })
+        // Intro paragraph
+        .to('.table-intro', { opacity: 1, duration: 0.8 })
+        // Timeline gold line grows downward
+        .to('.table-timeline-line', { scaleY: 1, duration: 2 }, '-=0.3')
+        // Timeline steps reveal one by one
+        .to('.timeline-step', {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.3,
+          ease: 'power2.out'
+        }, '-=1.5')
+        // Closing quotes
+        .to('.table-quote', { opacity: 1, duration: 1 });
     })();
   </script>
 
