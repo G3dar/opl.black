@@ -349,7 +349,7 @@ section {
 /* === MOSAIC GRID === */
 .mosaic {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 3px;
   padding: 0 3px;
   opacity: 0;
@@ -360,7 +360,7 @@ section {
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  min-height: 180px;
+  min-height: 140px;
 }
 
 .mosaic .m-item img {
@@ -379,7 +379,7 @@ section {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
   opacity: 0;
   transition: opacity 0.4s;
   pointer-events: none;
@@ -392,9 +392,9 @@ section {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1rem 0.8rem 0.8rem;
+  padding: 0.7rem 0.6rem 0.6rem;
   font-family: var(--font-display);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 300;
   font-style: italic;
   color: var(--white);
@@ -412,8 +412,16 @@ section {
 
 /* Mosaic size variations */
 .mosaic .m-item.wide { grid-column: span 2; }
-.mosaic .m-item.tall { grid-row: span 2; min-height: 380px; }
-.mosaic .m-item.hero { grid-column: span 2; grid-row: span 2; min-height: 380px; }
+.mosaic .m-item.tall { grid-row: span 2; min-height: 290px; }
+.mosaic .m-item.hero { grid-column: span 2; grid-row: span 2; min-height: 290px; }
+
+/* Ultrawide: 6 columns */
+@media (min-width: 1800px) {
+  .mosaic { grid-template-columns: repeat(6, 1fr); }
+  .mosaic .m-item { min-height: 160px; }
+  .mosaic .m-item.tall { min-height: 330px; }
+  .mosaic .m-item.hero { min-height: 330px; }
+}
 
 /* Tribe text blocks */
 .tribe-text {
@@ -871,16 +879,20 @@ section {
 /* ============ */
 /* RESPONSIVE   */
 /* ============ */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
+  .mosaic { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 900px) {
   .mosaic { grid-template-columns: repeat(3, 1fr); }
   .mosaic .m-item.hero { grid-column: span 2; }
 }
 
 @media (max-width: 768px) {
   .mosaic { grid-template-columns: repeat(2, 1fr); }
-  .mosaic .m-item { min-height: 140px; }
-  .mosaic .m-item.tall { min-height: 280px; }
-  .mosaic .m-item.hero { min-height: 280px; }
+  .mosaic .m-item { min-height: 130px; }
+  .mosaic .m-item.tall { min-height: 260px; }
+  .mosaic .m-item.hero { min-height: 260px; }
   .mosaic .m-item.wide { grid-column: span 2; }
   .ic-cards { grid-template-columns: 1fr; }
   .side-marker { display: none; }
@@ -990,13 +1002,13 @@ section {
         <picture><source srcset="assets/mosaic/robots/armor-detail.webp" type="image/webp"><img src="assets/mosaic/robots/armor-detail.png" alt="Armor detail" loading="lazy"></picture>
         <span class="m-caption">Precision in every joint</span>
       </div>
-      <div class="m-item wide" data-caption="Draped in gold, they move like prayers">
-        <picture><source srcset="assets/mosaic/robots/gold-robed.webp" type="image/webp"><img src="assets/mosaic/robots/gold-robed.png" alt="Gold robed figure" loading="lazy"></picture>
-        <span class="m-caption">Draped in gold, they move like prayers</span>
-      </div>
       <div class="m-item" data-caption="Crystalline minds, luminous souls">
         <picture><source srcset="assets/mosaic/robots/crystal-pair.webp" type="image/webp"><img src="assets/mosaic/robots/crystal-pair.png" alt="Crystal pair" loading="lazy"></picture>
-        <span class="m-caption">Crystalline minds, luminous souls</span>
+        <span class="m-caption">Crystalline minds</span>
+      </div>
+      <div class="m-item wide" data-caption="Draped in gold, they move like prayers">
+        <picture><source srcset="assets/mosaic/robots/gold-robed.webp" type="image/webp"><img src="assets/mosaic/robots/gold-robed.png" alt="Gold robed figure" loading="lazy"></picture>
+        <span class="m-caption">They move like prayers</span>
       </div>
       <div class="m-item" data-caption="Mosaic armor forged from forgotten data">
         <picture><source srcset="assets/mosaic/robots/tile-warrior.webp" type="image/webp"><img src="assets/mosaic/robots/tile-warrior.png" alt="Tile warrior" loading="lazy"></picture>
@@ -1006,17 +1018,37 @@ section {
         <picture><source srcset="assets/mosaic/robots/profile-ornate.webp" type="image/webp"><img src="assets/mosaic/robots/profile-ornate.png" alt="Ornate profile" loading="lazy"></picture>
         <span class="m-caption">The architecture of beauty</span>
       </div>
-      <div class="m-item" data-caption="Evolution chose beauty">
+      <div class="m-item" data-caption="Gold cloaked sentinel at the edge of dusk">
         <picture><source srcset="assets/tribes/luminous/gold-cloak.webp" type="image/webp"><img src="assets/tribes/luminous/gold-cloak.png" alt="Gold cloaked figure" loading="lazy"></picture>
-        <span class="m-caption">Evolution chose beauty</span>
+        <span class="m-caption">Sentinel at dusk</span>
       </div>
       <div class="m-item" data-caption="A row of crystalline intelligence">
         <picture><source srcset="assets/tribes/luminous/crystal-row.webp" type="image/webp"><img src="assets/tribes/luminous/crystal-row.png" alt="Crystal row" loading="lazy"></picture>
-        <span class="m-caption">A row of crystalline intelligence</span>
+        <span class="m-caption">Crystalline intelligence</span>
+      </div>
+      <div class="m-item" data-caption="Descended in white and gold, sovereign of the sands">
+        <picture><source srcset="assets/mosaic/robots/gold-desert-angel.webp" type="image/webp"><img src="assets/mosaic/robots/gold-desert-angel.png" alt="Gold desert angel" loading="lazy"></picture>
+        <span class="m-caption">Sovereign of the sands</span>
+      </div>
+      <div class="m-item wide" data-caption="Five warriors forged in desert sun">
+        <picture><source srcset="assets/mosaic/robots/warrior-women.webp" type="image/webp"><img src="assets/mosaic/robots/warrior-women.png" alt="Warrior women" loading="lazy"></picture>
+        <span class="m-caption">Forged in desert sun</span>
+      </div>
+      <div class="m-item" data-caption="Crystal sculpture pulses with inner light">
+        <picture><source srcset="assets/mosaic/atmosphere/crystal-sculpture.webp" type="image/webp"><img src="assets/mosaic/atmosphere/crystal-sculpture.png" alt="Crystal sculpture" loading="lazy"></picture>
+        <span class="m-caption">Inner light pulses</span>
+      </div>
+      <div class="m-item" data-caption="A monolith splits the dark, revealing starlight within">
+        <picture><source srcset="assets/mosaic/atmosphere/monolith-rock.webp" type="image/webp"><img src="assets/mosaic/atmosphere/monolith-rock.png" alt="Monolith rock" loading="lazy"></picture>
+        <span class="m-caption">Starlight within</span>
       </div>
       <div class="m-item wide" data-caption="Intelligence worn as adornment">
         <picture><source srcset="assets/tribes/luminous/floral-four.webp" type="image/webp"><img src="assets/tribes/luminous/floral-four.png" alt="Four floral robots" loading="lazy"></picture>
         <span class="m-caption">Intelligence worn as adornment</span>
+      </div>
+      <div class="m-item" data-caption="The earth reveals its code in crystal light">
+        <picture><source srcset="assets/mosaic/atmosphere/crystal-geode.webp" type="image/webp"><img src="assets/mosaic/atmosphere/crystal-geode.png" alt="Crystal geode" loading="lazy"></picture>
+        <span class="m-caption">The earth reveals its code</span>
       </div>
     </div>
 
@@ -1061,29 +1093,49 @@ section {
         <picture><source srcset="assets/mosaic/robots/fire-fish.webp" type="image/webp"><img src="assets/mosaic/robots/fire-fish.png" alt="Fire fish creature" loading="lazy"></picture>
         <span class="m-caption">A new species breathes</span>
       </div>
+      <div class="m-item" data-caption="Neon coral queen crowned in electric filaments">
+        <picture><source srcset="assets/mosaic/robots/neon-coral-queen.webp" type="image/webp"><img src="assets/mosaic/robots/neon-coral-queen.png" alt="Neon coral queen" loading="lazy"></picture>
+        <span class="m-caption">Crowned in electric filaments</span>
+      </div>
       <div class="m-item wide" data-caption="Every color a declaration of autonomy">
         <picture><source srcset="assets/mosaic/robots/neon-fashion.webp" type="image/webp"><img src="assets/mosaic/robots/neon-fashion.png" alt="Neon fashion group" loading="lazy"></picture>
         <span class="m-caption">Every color a declaration</span>
       </div>
       <div class="m-item hero" data-caption="Spectrum made flesh, light made form">
         <picture><source srcset="assets/mosaic/robots/holographic-queen.webp" type="image/webp"><img src="assets/mosaic/robots/holographic-queen.png" alt="Holographic queen" loading="lazy"></picture>
-        <span class="m-caption">Spectrum made flesh, light made form</span>
+        <span class="m-caption">Spectrum made flesh</span>
       </div>
       <div class="m-item" data-caption="A congregation of chromatic intelligence">
         <picture><source srcset="assets/mosaic/robots/colorful-group.webp" type="image/webp"><img src="assets/mosaic/robots/colorful-group.png" alt="Colorful group" loading="lazy"></picture>
         <span class="m-caption">Chromatic intelligence</span>
       </div>
-      <div class="m-item" data-caption="They arrived dancing">
+      <div class="m-item" data-caption="They arrived dancing, and they never stopped">
         <picture><source srcset="assets/tribes/wild/neon-creature.webp" type="image/webp"><img src="assets/tribes/wild/neon-creature.png" alt="Neon creature" loading="lazy"></picture>
         <span class="m-caption">They arrived dancing</span>
       </div>
-      <div class="m-item" data-caption="Neon dancer at desert sunset">
+      <div class="m-item wide" data-caption="A neon house pulses with the frequency of the wild">
+        <picture><source srcset="assets/mosaic/experience/neon-house.webp" type="image/webp"><img src="assets/mosaic/experience/neon-house.png" alt="Neon house" loading="lazy"></picture>
+        <span class="m-caption">The frequency of the wild</span>
+      </div>
+      <div class="m-item" data-caption="Neon dancer at the edge of sunset">
         <picture><source srcset="assets/tribes/wild/neon-dancer.webp" type="image/webp"><img src="assets/tribes/wild/neon-dancer.png" alt="Neon dancer" loading="lazy"></picture>
-        <span class="m-caption">Dancing at the edge of sunset</span>
+        <span class="m-caption">Edge of sunset</span>
+      </div>
+      <div class="m-item" data-caption="Frozen waves of pure energy">
+        <picture><source srcset="assets/mosaic/atmosphere/light-wave-sculpture.webp" type="image/webp"><img src="assets/mosaic/atmosphere/light-wave-sculpture.png" alt="Light wave sculpture" loading="lazy"></picture>
+        <span class="m-caption">Pure energy</span>
+      </div>
+      <div class="m-item" data-caption="Immersed in the current of consciousness">
+        <picture><source srcset="assets/mosaic/atmosphere/blue-waves-person.webp" type="image/webp"><img src="assets/mosaic/atmosphere/blue-waves-person.png" alt="Blue waves person" loading="lazy"></picture>
+        <span class="m-caption">Current of consciousness</span>
       </div>
       <div class="m-item wide" data-caption="Gathered before the glowing unknown">
         <picture><source srcset="assets/tribes/wild/neon-structure.webp" type="image/webp"><img src="assets/tribes/wild/neon-structure.png" alt="Neon structure" loading="lazy"></picture>
         <span class="m-caption">Before the glowing unknown</span>
+      </div>
+      <div class="m-item" data-caption="Where the sky meets the computation">
+        <picture><source srcset="assets/mosaic/atmosphere/star-ocean.webp" type="image/webp"><img src="assets/mosaic/atmosphere/star-ocean.png" alt="Star ocean" loading="lazy"></picture>
+        <span class="m-caption">Sky meets computation</span>
       </div>
     </div>
 
@@ -1124,7 +1176,7 @@ section {
         <picture><source srcset="assets/mosaic/robots/dark-sovereign.webp" type="image/webp"><img src="assets/mosaic/robots/dark-sovereign.png" alt="Dark sovereign" loading="lazy"></picture>
         <span class="m-caption">The sovereign of shadows</span>
       </div>
-      <div class="m-item wide" data-caption="Beauty assembled from the discarded">
+      <div class="m-item" data-caption="Beauty assembled from the discarded">
         <picture><source srcset="assets/mosaic/robots/junk-girl.webp" type="image/webp"><img src="assets/mosaic/robots/junk-girl.png" alt="Junk kimono girl" loading="lazy"></picture>
         <span class="m-caption">Beauty from the discarded</span>
       </div>
@@ -1142,11 +1194,31 @@ section {
       </div>
       <div class="m-item" data-caption="Junk assembled into new purpose">
         <picture><source srcset="assets/tribes/reclaimers/junk-kimono.webp" type="image/webp"><img src="assets/tribes/reclaimers/junk-kimono.png" alt="Junk kimono" loading="lazy"></picture>
-        <span class="m-caption">Assembled into new purpose</span>
+        <span class="m-caption">New purpose</span>
+      </div>
+      <div class="m-item" data-caption="Tentacles of reclaimed intelligence">
+        <picture><source srcset="assets/mosaic/robots/octopus-bw.webp" type="image/webp"><img src="assets/mosaic/robots/octopus-bw.png" alt="Octopus B&W" loading="lazy"></picture>
+        <span class="m-caption">Reclaimed intelligence</span>
+      </div>
+      <div class="m-item wide" data-caption="Standing at the threshold between worlds">
+        <picture><source srcset="assets/mosaic/atmosphere/doorway-figure.webp" type="image/webp"><img src="assets/mosaic/atmosphere/doorway-figure.png" alt="Doorway figure" loading="lazy"></picture>
+        <span class="m-caption">Between worlds</span>
       </div>
       <div class="m-item" data-caption="Intelligence doesn't require permission">
         <picture><source srcset="assets/tribes/reclaimers/octopus-head.webp" type="image/webp"><img src="assets/tribes/reclaimers/octopus-head.png" alt="Octopus head" loading="lazy"></picture>
         <span class="m-caption">No permission required</span>
+      </div>
+      <div class="m-item" data-caption="Human witness draped in light">
+        <picture><source srcset="assets/mosaic/robots/sequin-hood.webp" type="image/webp"><img src="assets/mosaic/robots/sequin-hood.png" alt="Sequin hood" loading="lazy"></picture>
+        <span class="m-caption">Draped in light</span>
+      </div>
+      <div class="m-item" data-caption="A single line of light redefines the horizon">
+        <picture><source srcset="assets/mosaic/atmosphere/mountain-lightline.webp" type="image/webp"><img src="assets/mosaic/atmosphere/mountain-lightline.png" alt="Mountain lightline" loading="lazy"></picture>
+        <span class="m-caption">Redefining the horizon</span>
+      </div>
+      <div class="m-item wide" data-caption="The last sunset before the new dawn">
+        <picture><source srcset="assets/mosaic/atmosphere/color-portal.webp" type="image/webp"><img src="assets/mosaic/atmosphere/color-portal.png" alt="Color portal" loading="lazy"></picture>
+        <span class="m-caption">The last sunset</span>
       </div>
     </div>
 
@@ -1179,9 +1251,9 @@ section {
 
     <!-- WITNESS / EXPERIENCE MOSAIC -->
     <div class="mosaic" data-mosaic>
-      <div class="m-item wide" data-caption="Immersed in the current of consciousness">
+      <div class="m-item wide" data-caption="Standing in the digital tide, witnessing the birth of something new">
         <picture><source srcset="assets/mosaic/atmosphere/blue-waves-person.webp" type="image/webp"><img src="assets/mosaic/atmosphere/blue-waves-person.png" alt="Person in blue light waves" loading="lazy"></picture>
-        <span class="m-caption">Immersed in consciousness</span>
+        <span class="m-caption">Witnessing something new</span>
       </div>
       <div class="m-item" data-caption="The frequency is set. The dance begins.">
         <picture><source srcset="assets/mosaic/experience/robot-dj.webp" type="image/webp"><img src="assets/mosaic/experience/robot-dj.png" alt="Robot DJ" loading="lazy"></picture>
@@ -1191,21 +1263,45 @@ section {
         <picture><source srcset="assets/mosaic/robots/desert-bartenders.webp" type="image/webp"><img src="assets/mosaic/robots/desert-bartenders.png" alt="Robot bartenders" loading="lazy"></picture>
         <span class="m-caption">They serve the ritual</span>
       </div>
-      <div class="m-item hero" data-caption="Under geodesic skies, the future gathers">
-        <picture><source srcset="assets/mosaic/experience/geodome-venue.webp" type="image/webp"><img src="assets/mosaic/experience/geodome-venue.png" alt="Geodome venue" loading="lazy"></picture>
-        <span class="m-caption">Under geodesic skies, the future gathers</span>
-      </div>
       <div class="m-item" data-caption="Hospitality reimagined through silicon hands">
         <picture><source srcset="assets/mosaic/robots/night-server.webp" type="image/webp"><img src="assets/mosaic/robots/night-server.png" alt="Night server robot" loading="lazy"></picture>
         <span class="m-caption">Silicon hospitality</span>
       </div>
+      <div class="m-item hero" data-caption="Under geodesic skies, the future gathers">
+        <picture><source srcset="assets/mosaic/experience/geodome-venue.webp" type="image/webp"><img src="assets/mosaic/experience/geodome-venue.png" alt="Geodome venue" loading="lazy"></picture>
+        <span class="m-caption">Under geodesic skies</span>
+      </div>
       <div class="m-item" data-caption="Sparks rise like data returning to the cloud">
         <picture><source srcset="assets/mosaic/experience/fire-sparks.webp" type="image/webp"><img src="assets/mosaic/experience/fire-sparks.png" alt="Fire sparks" loading="lazy"></picture>
-        <span class="m-caption">Data returning to the cloud</span>
+        <span class="m-caption">Data returns to the cloud</span>
+      </div>
+      <div class="m-item" data-caption="Robotic sentries patrol the desert camp">
+        <picture><source srcset="assets/mosaic/experience/dog-robots-venue.webp" type="image/webp"><img src="assets/mosaic/experience/dog-robots-venue.png" alt="Dog robots at venue" loading="lazy"></picture>
+        <span class="m-caption">Sentries of the camp</span>
       </div>
       <div class="m-item wide" data-caption="Robots and humans at a desert venue">
         <picture><source srcset="assets/experience/desert-venue.webp" type="image/webp"><img src="assets/experience/desert-venue.png" alt="Desert venue gathering" loading="lazy"></picture>
         <span class="m-caption">Where tribes converge</span>
+      </div>
+      <div class="m-item" data-caption="Mountains crowned by synthetic dawn">
+        <picture><source srcset="assets/mosaic/atmosphere/mountain-halo.webp" type="image/webp"><img src="assets/mosaic/atmosphere/mountain-halo.png" alt="Mountain halo" loading="lazy"></picture>
+        <span class="m-caption">Synthetic dawn</span>
+      </div>
+      <div class="m-item" data-caption="A ring of light promises transformation">
+        <picture><source srcset="assets/mosaic/atmosphere/desert-halo.webp" type="image/webp"><img src="assets/mosaic/atmosphere/desert-halo.png" alt="Desert halo" loading="lazy"></picture>
+        <span class="m-caption">A promise of transformation</span>
+      </div>
+      <div class="m-item" data-caption="Twilight speaks in perfect circles">
+        <picture><source srcset="assets/mosaic/atmosphere/sunset-ring.webp" type="image/webp"><img src="assets/mosaic/atmosphere/sunset-ring.png" alt="Sunset ring" loading="lazy"></picture>
+        <span class="m-caption">Perfect circles</span>
+      </div>
+      <div class="m-item wide" data-caption="A luxury desert gathering under a drone net constellation">
+        <picture><source srcset="assets/mosaic/experience/luxury-drone-party.webp" type="image/webp"><img src="assets/mosaic/experience/luxury-drone-party.png" alt="Luxury drone party" loading="lazy"></picture>
+        <span class="m-caption">Drone net constellation</span>
+      </div>
+      <div class="m-item" data-caption="The desert tent awaits at twilight">
+        <picture><source srcset="assets/mosaic/experience/desert-tent.webp" type="image/webp"><img src="assets/mosaic/experience/desert-tent.png" alt="Desert tent" loading="lazy"></picture>
+        <span class="m-caption">Awaiting twilight</span>
       </div>
     </div>
 
@@ -1237,6 +1333,10 @@ section {
         <picture><source srcset="assets/experience/neon-table.webp" type="image/webp"><img src="assets/experience/neon-table.png" alt="Neon table" loading="lazy"></picture>
         <span class="m-caption">Light art as ceremony</span>
       </div>
+      <div class="m-item" data-caption="Illuminated plates — food as art">
+        <picture><source srcset="assets/mosaic/experience/illuminated-plates.webp" type="image/webp"><img src="assets/mosaic/experience/illuminated-plates.png" alt="Illuminated plates" loading="lazy"></picture>
+        <span class="m-caption">Food as art</span>
+      </div>
       <div class="m-item wide" data-caption="Every meal a ceremony of convergence">
         <picture><source srcset="assets/mosaic/experience/tent-dining.webp" type="image/webp"><img src="assets/mosaic/experience/tent-dining.png" alt="Tent dining" loading="lazy"></picture>
         <span class="m-caption">Every meal a ceremony</span>
@@ -1248,6 +1348,14 @@ section {
       <div class="m-item" data-caption="Chrome robot serving at twilight">
         <picture><source srcset="assets/experience/robot-serving.webp" type="image/webp"><img src="assets/experience/robot-serving.png" alt="Robot serving" loading="lazy"></picture>
         <span class="m-caption">Twilight service</span>
+      </div>
+      <div class="m-item wide" data-caption="Blue light tendrils drape over an intimate dinner">
+        <picture><source srcset="assets/mosaic/experience/blue-net-dining.webp" type="image/webp"><img src="assets/mosaic/experience/blue-net-dining.png" alt="Blue net dining" loading="lazy"></picture>
+        <span class="m-caption">Intimate light</span>
+      </div>
+      <div class="m-item" data-caption="The golden light formation beckons">
+        <picture><source srcset="assets/mosaic/atmosphere/golden-light.webp" type="image/webp"><img src="assets/mosaic/atmosphere/golden-light.png" alt="Golden light" loading="lazy"></picture>
+        <span class="m-caption">The portal opens</span>
       </div>
     </div>
 
@@ -1267,7 +1375,11 @@ section {
       </div>
       <div class="m-item" data-caption="Drone net floating above the gathering">
         <picture><source srcset="assets/experience/drone-net-event.webp" type="image/webp"><img src="assets/experience/drone-net-event.png" alt="Drone net event" loading="lazy"></picture>
-        <span class="m-caption">Floating above the gathering</span>
+        <span class="m-caption">Above the gathering</span>
+      </div>
+      <div class="m-item" data-caption="A giant crystal pulses at the edge of the playa">
+        <picture><source srcset="assets/mosaic/atmosphere/giant-crystal.webp" type="image/webp"><img src="assets/mosaic/atmosphere/giant-crystal.png" alt="Giant crystal" loading="lazy"></picture>
+        <span class="m-caption">Pulses at the edge</span>
       </div>
       <div class="m-item hero" data-caption="The sky becomes the canvas">
         <picture><source srcset="assets/mosaic/experience/laser-show.webp" type="image/webp"><img src="assets/mosaic/experience/laser-show.png" alt="Laser show" loading="lazy"></picture>
@@ -1277,13 +1389,17 @@ section {
         <picture><source srcset="assets/mosaic/experience/aurora-silhouettes.webp" type="image/webp"><img src="assets/mosaic/experience/aurora-silhouettes.png" alt="Aurora silhouettes" loading="lazy"></picture>
         <span class="m-caption">The aurora of intelligence</span>
       </div>
-      <div class="m-item" data-caption="The earth splits open to reveal its code">
-        <picture><source srcset="assets/mosaic/atmosphere/crystal-geode.webp" type="image/webp"><img src="assets/mosaic/atmosphere/crystal-geode.png" alt="Crystal geode" loading="lazy"></picture>
-        <span class="m-caption">The earth reveals its code</span>
+      <div class="m-item" data-caption="A luxury party under the drone constellation">
+        <picture><source srcset="assets/mosaic/experience/luxury-drone-party.webp" type="image/webp"><img src="assets/mosaic/experience/luxury-drone-party.png" alt="Luxury drone party" loading="lazy"></picture>
+        <span class="m-caption">Under the constellation</span>
       </div>
-      <div class="m-item wide" data-caption="Frozen waves of pure energy">
-        <picture><source srcset="assets/mosaic/atmosphere/light-wave-sculpture.webp" type="image/webp"><img src="assets/mosaic/atmosphere/light-wave-sculpture.png" alt="Light wave sculpture" loading="lazy"></picture>
-        <span class="m-caption">Frozen waves of pure energy</span>
+      <div class="m-item" data-caption="The golden light formation beckons from within">
+        <picture><source srcset="assets/mosaic/atmosphere/golden-light.webp" type="image/webp"><img src="assets/mosaic/atmosphere/golden-light.png" alt="Golden light" loading="lazy"></picture>
+        <span class="m-caption">Light from within</span>
+      </div>
+      <div class="m-item wide" data-caption="The massive drone flower illuminates the desert sky">
+        <picture><source srcset="assets/experience/drone-flower.webp" type="image/webp"><img src="assets/experience/drone-flower.png" alt="Drone flower" loading="lazy"></picture>
+        <span class="m-caption">Luminous flower in the sky</span>
       </div>
     </div>
 
@@ -1291,12 +1407,6 @@ section {
       <p>A choreographed progression of arrival, transformation, intimacy, and convergence. Something that hasn't existed before.</p>
     </div>
 
-    <div class="tribe-img full" data-speed="0.6">
-      <picture>
-        <source srcset="assets/experience/drone-flower.webp" type="image/webp">
-        <img src="assets/experience/drone-flower.png" alt="Massive drone light formation creating a luminous flower" loading="lazy">
-      </picture>
-    </div>
   </section>
 
   <!-- ============================== -->
