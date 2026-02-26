@@ -61,8 +61,8 @@ body {
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(ellipse 140% 70% at 50% 20%, rgba(200, 120, 50, 0.18), transparent 60%),
-              radial-gradient(ellipse 120% 80% at 50% 80%, rgba(180, 100, 40, 0.15), transparent 70%);
+  background: radial-gradient(ellipse 140% 70% at 50% 20%, rgba(210, 130, 55, 0.25), transparent 60%),
+              radial-gradient(ellipse 120% 80% at 50% 80%, rgba(190, 110, 45, 0.20), transparent 70%);
 }
 
 #warm-wash {
@@ -71,7 +71,7 @@ body {
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(180deg, rgba(180, 100, 40, 0.10) 0%, rgba(160, 85, 35, 0.08) 30%, rgba(140, 70, 30, 0.06) 50%, rgba(200, 120, 50, 0.12) 100%);
+  background: linear-gradient(180deg, rgba(200, 120, 50, 0.18) 0%, rgba(180, 100, 40, 0.14) 30%, rgba(160, 85, 35, 0.10) 60%, rgba(210, 130, 55, 0.20) 100%);
 }
 
 #sunrise-top {
@@ -80,7 +80,17 @@ body {
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(180deg, rgba(220, 140, 60, 0.22) 0%, rgba(200, 110, 45, 0.12) 25%, transparent 55%);
+  background: linear-gradient(180deg, rgba(235, 160, 70, 0.35) 0%, rgba(220, 140, 55, 0.22) 20%, rgba(200, 115, 45, 0.10) 45%, transparent 65%);
+}
+
+#sunset-blaze {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse 160% 60% at 50% 15%, rgba(255, 180, 80, 0.40), rgba(240, 150, 60, 0.20) 40%, transparent 70%),
+              linear-gradient(180deg, rgba(255, 170, 70, 0.25) 0%, rgba(230, 140, 55, 0.15) 30%, rgba(200, 110, 45, 0.08) 60%, transparent 80%);
 }
 
 /* === WebGL Canvas === */
@@ -934,6 +944,7 @@ section {
   <div id="light-progression" aria-hidden="true"></div>
   <div id="warm-wash" aria-hidden="true"></div>
   <div id="sunrise-top" aria-hidden="true"></div>
+  <div id="sunset-blaze" aria-hidden="true"></div>
 
   <div class="side-marker">Black Opal — The Dance — An Immersive Experience</div>
 
@@ -1628,39 +1639,55 @@ gsap.to('#warm-wash', {
   }
 });
 
-// Sunrise glow at top of viewport — the payoff
+// Sunrise glow at top of viewport
 gsap.to('#sunrise-top', {
   opacity: 1,
-  ease: 'power2.in',
+  ease: 'power1.in',
   scrollTrigger: {
-    trigger: '#tribe-wild',
+    trigger: '#tribe-reclaimers',
     start: 'top bottom',
     endTrigger: '#encounter',
-    end: 'top top',
+    end: 'top center',
     scrub: 2
   }
 });
 
-// Body background color — faster warm-up
+// Final sunset blaze — the bright climax
+gsap.to('#sunset-blaze', {
+  opacity: 1,
+  ease: 'power1.in',
+  scrollTrigger: {
+    trigger: '#encounter',
+    start: 'top center',
+    endTrigger: '#dance',
+    end: 'center center',
+    scrub: 2
+  }
+});
+
+// Body background color — goes much brighter toward the end
 const bodyColorTl = gsap.timeline({
   scrollTrigger: {
     trigger: '#awakening',
     start: 'top top',
-    endTrigger: '#dance',
+    endTrigger: '#invitation',
     end: 'top bottom',
     scrub: 2
   }
 });
 
 bodyColorTl
-  .to('body', { backgroundColor: '#0a0908', duration: 0.08 })
-  .to('body', { backgroundColor: '#0f0d0a', duration: 0.12 })
-  .to('body', { backgroundColor: '#15120d', duration: 0.15 })
-  .to('body', { backgroundColor: '#1c1812', duration: 0.15 })
-  .to('body', { backgroundColor: '#231e16', duration: 0.15 })
-  .to('body', { backgroundColor: '#2a2319', duration: 0.15 })
-  .to('body', { backgroundColor: '#30281c', duration: 0.1 })
-  .to('body', { backgroundColor: '#352c1e', duration: 0.1 });
+  .to('body', { backgroundColor: '#0c0a08', duration: 0.06 })
+  .to('body', { backgroundColor: '#12100b', duration: 0.09 })
+  .to('body', { backgroundColor: '#1a1610', duration: 0.10 })
+  .to('body', { backgroundColor: '#241e15', duration: 0.10 })
+  .to('body', { backgroundColor: '#2e261a', duration: 0.10 })
+  .to('body', { backgroundColor: '#3a3020', duration: 0.10 })
+  .to('body', { backgroundColor: '#463a27', duration: 0.10 })
+  .to('body', { backgroundColor: '#54442e', duration: 0.10 })
+  .to('body', { backgroundColor: '#624f35', duration: 0.10 })
+  .to('body', { backgroundColor: '#705a3c', duration: 0.08 })
+  .to('body', { backgroundColor: '#7d6443', duration: 0.07 });
 
 /* === AWAKENING === */
 const awakeningTl = gsap.timeline({
