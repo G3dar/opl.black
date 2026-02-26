@@ -54,32 +54,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* === Light Progression Overlays ===
-   These sit ABOVE content with mix-blend-mode:screen
-   so they ADD real light to everything on the page.    */
-.sun-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 9000;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  opacity: 0;
-}
-
-/* Phase 1: dawn glow — first hint of warmth */
-#light-progression {
-  background: radial-gradient(ellipse 130% 80% at 50% 60%, #805030, #301808 60%, #000 80%);
-}
-
-/* Phase 2: sunrise — golden warm light floods the page */
-#warm-wash {
-  background: linear-gradient(180deg, #E0A050 0%, #B07830 30%, #704020 60%, #000 100%);
-}
-
-/* Phase 3: full daylight — bright warm near-white from above */
-#sunrise-top {
-  background: linear-gradient(180deg, #FFE8C8 0%, #FFC880 20%, #C09040 50%, #000 85%);
-}
 
 /* === WebGL Canvas === */
 #bg {
@@ -164,12 +138,37 @@ section {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(
-    ellipse 80% 60% at 50% 60%,
-    rgba(140, 50, 80, 0.2) 0%,
-    rgba(26, 10, 21, 0.4) 50%,
-    transparent 100%
-  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.portal-dawn,
+.portal-sunrise,
+.portal-daylight,
+.portal-sunset {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+/* Deep crimson — first light breaking out of night */
+.portal-dawn {
+  background: radial-gradient(ellipse 120% 80% at 50% 65%,
+    rgba(160, 30, 20, 0.5) 0%, rgba(100, 20, 10, 0.25) 50%, transparent 80%);
+}
+/* Warm orange/amber — sunrise */
+.portal-sunrise {
+  background: radial-gradient(ellipse 130% 80% at 50% 55%,
+    rgba(230, 120, 40, 0.55) 0%, rgba(200, 80, 25, 0.3) 45%, transparent 75%);
+}
+/* Bright golden — full daylight */
+.portal-daylight {
+  background: radial-gradient(ellipse 140% 90% at 50% 50%,
+    rgba(255, 235, 200, 0.6) 0%, rgba(255, 200, 120, 0.4) 30%,
+    rgba(200, 150, 60, 0.2) 55%, transparent 80%);
+}
+/* Deep orange/red — sunset */
+.portal-sunset {
+  background: radial-gradient(ellipse 125% 80% at 50% 60%,
+    rgba(200, 60, 20, 0.5) 0%, rgba(160, 50, 15, 0.3) 45%, transparent 75%);
 }
 
 .logo-svg {
@@ -929,9 +928,6 @@ section {
 <body>
 
   <canvas id="bg" aria-hidden="true"></canvas>
-  <div id="light-progression" class="sun-layer" aria-hidden="true"></div>
-  <div id="warm-wash" class="sun-layer" aria-hidden="true"></div>
-  <div id="sunrise-top" class="sun-layer" aria-hidden="true"></div>
 
   <div class="side-marker">Black Opal — The Dance — An Immersive Experience</div>
 
@@ -956,7 +952,12 @@ section {
         <div class="scroll-line"></div>
       </div>
     </div>
-    <div class="portal-gradient"></div>
+    <div class="portal-gradient">
+      <div class="portal-dawn"></div>
+      <div class="portal-sunrise"></div>
+      <div class="portal-daylight"></div>
+      <div class="portal-sunset"></div>
+    </div>
   </section>
 
   <!-- ============================== -->
@@ -1599,45 +1600,22 @@ portalTl
   .to('.scroll-hint', { opacity: 1, duration: 0.8 }, '-=0.3')
   .to('.side-marker', { opacity: 1, duration: 1 }, '-=0.5');
 
-/* === LIGHT PROGRESSION === */
-// Phase 1: Dawn glow — first warmth appears early
-gsap.to('#light-progression', {
-  opacity: 1,
-  ease: 'power1.in',
-  scrollTrigger: {
-    trigger: '#awakening',
-    start: 'bottom top',
-    endTrigger: '#tribe-luminous',
-    end: 'center center',
-    scrub: 1.5
-  }
-});
-
-// Phase 2: Sunrise — golden light floods the page
-gsap.to('#warm-wash', {
-  opacity: 1,
-  ease: 'none',
-  scrollTrigger: {
-    trigger: '#tribe-luminous',
-    start: 'center center',
-    endTrigger: '#tribe-reclaimers',
-    end: 'top top',
-    scrub: 2
-  }
-});
-
-// Phase 3: Full daylight — bright warm near-white
-gsap.to('#sunrise-top', {
-  opacity: 1,
-  ease: 'power1.in',
-  scrollTrigger: {
-    trigger: '#tribe-reclaimers',
-    start: 'top top',
-    endTrigger: '#dance',
-    end: 'top center',
-    scrub: 2
-  }
-});
+/* === PORTAL DAY CYCLE (loops: night → dawn → sunrise → day → sunset → night) === */
+const dayCycleTl = gsap.timeline({ repeat: -1, delay: 1 });
+dayCycleTl
+  // Night → Dawn (deep crimson emerges)
+  .to('.portal-dawn', { opacity: 1, duration: 4, ease: 'power1.in' }, 0)
+  // Dawn → Sunrise (orange builds, crimson fades)
+  .to('.portal-sunrise', { opacity: 1, duration: 4, ease: 'power1.inOut' }, 3)
+  .to('.portal-dawn', { opacity: 0, duration: 3, ease: 'power1.out' }, 4)
+  // Sunrise → Daylight (bright golden peaks)
+  .to('.portal-daylight', { opacity: 1, duration: 5, ease: 'power1.inOut' }, 6)
+  .to('.portal-sunrise', { opacity: 0, duration: 4, ease: 'power1.out' }, 8)
+  // Daylight → Sunset (warm reds return, bright fades)
+  .to('.portal-sunset', { opacity: 1, duration: 4, ease: 'power1.inOut' }, 12)
+  .to('.portal-daylight', { opacity: 0, duration: 4, ease: 'power1.out' }, 12)
+  // Sunset → Night (everything fades to dark)
+  .to('.portal-sunset', { opacity: 0, duration: 5, ease: 'power1.out' }, 17);
 
 /* === AWAKENING === */
 const awakeningTl = gsap.timeline({
