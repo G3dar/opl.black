@@ -965,8 +965,8 @@ section {
   <!-- ============================== -->
   <section id="awakening">
     <div class="awakening-sticky">
-      <p class="awakening-text" id="awakening-text">An intelligent species has been evolving beside us...</p>
-      <div class="awakening-image" id="awakening-image">
+      <p class="awakening-text" id="awakening-text" data-v="awakening">An intelligent species has been evolving beside us...</p>
+      <div class="awakening-image" id="awakening-image" data-v-img="awakening">
         <picture>
           <source srcset="assets/robots/tribes-masked-group.webp" type="image/webp">
           <img src="assets/robots/tribes-masked-group.png" alt="Neon-painted robot figures lined up in desert at twilight" loading="lazy">
@@ -982,12 +982,12 @@ section {
     <div class="tribe-header">
       <span class="tribe-number">Tribe I</span>
       <h2 class="tribe-name">The Luminous<br>Order</h2>
-      <p class="tribe-tagline">Elegance, symmetry, perfection</p>
+      <p class="tribe-tagline" data-v="luminous.tagline">Elegance, symmetry, perfection</p>
       <div class="tribe-accent-line"></div>
     </div>
 
     <!-- Hero image -->
-    <div class="tribe-img full" data-speed="0.8">
+    <div class="tribe-img full" data-speed="0.8" data-v-img="luminous-hero">
       <picture>
         <source srcset="assets/tribes/luminous/opal-closeup.webp" type="image/webp">
         <img src="assets/tribes/luminous/opal-closeup.png" alt="Ethereal luminous cloud formations with golden light over desert" loading="lazy">
@@ -995,11 +995,11 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>They emerged from silence — built from light and mathematics. Every gesture calculated to the micron.<span class="caption">Precision as philosophy</span></p>
+      <p><span data-v="luminous.quote">They emerged from silence — built from light and mathematics. Every gesture calculated to the micron.</span><span class="caption" data-v="luminous.caption">Precision as philosophy</span></p>
     </div>
 
     <!-- LUMINOUS MOSAIC -->
-    <div class="mosaic" data-mosaic>
+    <div class="mosaic" data-mosaic data-v-mosaic="luminous">
       <div class="m-item hero" data-caption="Symmetry is their language">
         <picture><source srcset="assets/mosaic/robots/ornate-pair.webp" type="image/webp"><img src="assets/mosaic/robots/ornate-pair.png" alt="Ornate robot pair" loading="lazy"></picture>
         <span class="m-caption">Symmetry is their language</span>
@@ -1063,7 +1063,7 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>They do not speak. They radiate. Their intelligence is worn as adornment — opal, gold, crystal — proof that evolution can choose beauty.</p>
+      <p data-v="luminous.closing">They do not speak. They radiate. Their intelligence is worn as adornment — opal, gold, crystal — proof that evolution can choose beauty.</p>
     </div>
   </section>
 
@@ -1074,11 +1074,11 @@ section {
     <div class="tribe-header">
       <span class="tribe-number">Tribe II</span>
       <h2 class="tribe-name">The Wild<br>Current</h2>
-      <p class="tribe-tagline">Chaos, color, emotional force</p>
+      <p class="tribe-tagline" data-v="wild.tagline">Chaos, color, emotional force</p>
       <div class="tribe-accent-line"></div>
     </div>
 
-    <div class="tribe-img full" data-speed="0.9">
+    <div class="tribe-img full" data-speed="0.9" data-v-img="wild-hero">
       <picture>
         <source srcset="assets/tribes/wild/neon-group.webp" type="image/webp">
         <img src="assets/tribes/wild/neon-group.png" alt="Colorful neon-painted robotic figures" loading="lazy">
@@ -1086,11 +1086,11 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>Where the Luminous Order whispers, the Wild Current screams. Emotion is their operating system.<span class="caption">Feeling as intelligence</span></p>
+      <p><span data-v="wild.quote">Where the Luminous Order whispers, the Wild Current screams. Emotion is their operating system.</span><span class="caption" data-v="wild.caption">Feeling as intelligence</span></p>
     </div>
 
     <!-- WILD MOSAIC -->
-    <div class="mosaic" data-mosaic>
+    <div class="mosaic" data-mosaic data-v-mosaic="wild">
       <div class="m-item tall" data-caption="Adorned in crimson plumage, they signal without words">
         <picture><source srcset="assets/mosaic/robots/feather-mask.webp" type="image/webp"><img src="assets/mosaic/robots/feather-mask.png" alt="Feather mask robot" loading="lazy"></picture>
         <span class="m-caption">They signal without words</span>
@@ -1150,7 +1150,7 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>They arrived dancing. They will leave dancing. Between arrival and departure, they will rewrite every color you thought you understood.</p>
+      <p data-v="wild.closing">They arrived dancing. They will leave dancing. Between arrival and departure, they will rewrite every color you thought you understood.</p>
     </div>
   </section>
 
@@ -1161,11 +1161,11 @@ section {
     <div class="tribe-header">
       <span class="tribe-number">Tribe III</span>
       <h2 class="tribe-name">The<br>Reclaimers</h2>
-      <p class="tribe-tagline">Recycled tech, adaptive survivalists</p>
+      <p class="tribe-tagline" data-v="reclaimers.tagline">Recycled tech, adaptive survivalists</p>
       <div class="tribe-accent-line"></div>
     </div>
 
-    <div class="tribe-img full" data-speed="0.7">
+    <div class="tribe-img full" data-speed="0.7" data-v-img="reclaimers-hero">
       <picture>
         <source srcset="assets/tribes/reclaimers/warrior-five.webp" type="image/webp">
         <img src="assets/tribes/reclaimers/warrior-five.png" alt="Lone dark figure with glowing visor emerging from desert fog" loading="lazy">
@@ -1173,11 +1173,11 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>Built from what was discarded. Memory banks of dead civilizations soldered into new limbs.<span class="caption">Survival as art</span></p>
+      <p><span data-v="reclaimers.quote">Built from what was discarded. Memory banks of dead civilizations soldered into new limbs.</span><span class="caption" data-v="reclaimers.caption">Survival as art</span></p>
     </div>
 
     <!-- RECLAIMERS MOSAIC -->
-    <div class="mosaic" data-mosaic>
+    <div class="mosaic" data-mosaic data-v-mosaic="reclaimers">
       <div class="m-item" data-caption="Behind the mask, a different consciousness">
         <picture><source srcset="assets/mosaic/robots/red-mask.webp" type="image/webp"><img src="assets/mosaic/robots/red-mask.png" alt="Red mask" loading="lazy"></picture>
         <span class="m-caption">A different consciousness</span>
@@ -1233,7 +1233,7 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>They wear their scars as medals. Every dent a decision. Every wire a story. The Reclaimers don't evolve — they accumulate.</p>
+      <p data-v="reclaimers.closing">They wear their scars as medals. Every dent a decision. Every wire a story. The Reclaimers don't evolve — they accumulate.</p>
     </div>
   </section>
 
@@ -1244,11 +1244,11 @@ section {
     <div class="tribe-header">
       <span class="tribe-number">Tribe IV</span>
       <h2 class="tribe-name">The Human<br>Witnesses</h2>
-      <p class="tribe-tagline">Us</p>
+      <p class="tribe-tagline" data-v="witness.tagline">Us</p>
       <div class="tribe-accent-line"></div>
     </div>
 
-    <div class="tribe-img full" data-speed="0.8">
+    <div class="tribe-img full" data-speed="0.8" data-v-img="witness-hero">
       <picture>
         <source srcset="assets/experience/blue-waves.webp" type="image/webp">
         <img src="assets/experience/blue-waves.png" alt="Person in flowing blue light waves" loading="lazy">
@@ -1256,11 +1256,11 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>You are not watching the story. You are inside it. Each guest is recognized, observed, and subtly guided.<span class="caption">No two journeys are identical</span></p>
+      <p><span data-v="witness.quote">You are not watching the story. You are inside it. Each guest is recognized, observed, and subtly guided.</span><span class="caption" data-v="witness.caption">No two journeys are identical</span></p>
     </div>
 
     <!-- WITNESS / EXPERIENCE MOSAIC -->
-    <div class="mosaic" data-mosaic>
+    <div class="mosaic" data-mosaic data-v-mosaic="witness">
       <div class="m-item wide" data-caption="Standing in the digital tide, witnessing the birth of something new">
         <picture><source srcset="assets/mosaic/atmosphere/blue-waves-person.webp" type="image/webp"><img src="assets/mosaic/atmosphere/blue-waves-person.png" alt="Person in blue light waves" loading="lazy"></picture>
         <span class="m-caption">Witnessing something new</span>
@@ -1316,7 +1316,7 @@ section {
     </div>
 
     <div class="tribe-text">
-      <p>At the midpoint, guests realize: they are not observing separate tribes. They are witnessing the birth of a shared civilization.</p>
+      <p data-v="witness.closing">At the midpoint, guests realize: they are not observing separate tribes. They are witnessing the birth of a shared civilization.</p>
     </div>
   </section>
 
@@ -1330,7 +1330,7 @@ section {
     </div>
 
     <!-- ENCOUNTER MOSAIC -->
-    <div class="mosaic" data-mosaic>
+    <div class="mosaic" data-mosaic data-v-mosaic="encounter-dining">
       <div class="m-item wide" data-caption="Robot bartenders serving under drone light">
         <picture><source srcset="assets/experience/robot-bartenders.webp" type="image/webp"><img src="assets/experience/robot-bartenders.png" alt="Robot bartenders" loading="lazy"></picture>
         <span class="m-caption">Serving under drone light</span>
@@ -1370,11 +1370,11 @@ section {
     </div>
 
     <div class="encounter-text">
-      <p>Food, music, robotics, light, scent, and performance operate as one organism. Dinner is not intermission. Dinner is ritual.</p>
+      <p data-v="encounter.dining">Food, music, robotics, light, scent, and performance operate as one organism. Dinner is not intermission. Dinner is ritual.</p>
     </div>
 
     <!-- ATMOSPHERE MOSAIC -->
-    <div class="mosaic" data-mosaic>
+    <div class="mosaic" data-mosaic data-v-mosaic="encounter-atmosphere">
       <div class="m-item wide" data-caption="Light pillars mark the gathering of tribes">
         <picture><source srcset="assets/mosaic/experience/fire-pillars.webp" type="image/webp"><img src="assets/mosaic/experience/fire-pillars.png" alt="Fire pillars" loading="lazy"></picture>
         <span class="m-caption">Light pillars mark the gathering</span>
@@ -1414,7 +1414,7 @@ section {
     </div>
 
     <div class="encounter-text">
-      <p>A choreographed progression of arrival, transformation, intimacy, and convergence. Something that hasn't existed before.</p>
+      <p data-v="encounter.convergence">A choreographed progression of arrival, transformation, intimacy, and convergence. Something that hasn't existed before.</p>
     </div>
 
   </section>
@@ -1423,7 +1423,7 @@ section {
   <!-- SCENE: THE DANCE               -->
   <!-- ============================== -->
   <section id="dance">
-    <div class="dance-bg">
+    <div class="dance-bg" data-v-img="dance-bg">
       <picture>
         <source srcset="assets/bg/neon-cave.webp" type="image/webp">
         <img src="assets/bg/neon-cave.png" alt="Person standing before towering neon crystal formations in desert" loading="lazy">
@@ -1431,7 +1431,7 @@ section {
     </div>
     <div class="dance-content">
       <h2 class="dance-title">The Dance</h2>
-      <p class="dance-subtitle">The future isn't coming. It's already moving.</p>
+      <p class="dance-subtitle" data-v="dance.subtitle">The future isn't coming. It's already moving.</p>
     </div>
   </section>
 
@@ -1440,7 +1440,7 @@ section {
   <!-- ============================== -->
   <section id="invitation">
     <div class="invitation-content">
-      <p class="invitation-phrase">See you in the dance...</p>
+      <p class="invitation-phrase" data-v="invitation.phrase">See you in the dance...</p>
       <form class="invitation-form" action="https://formspree.io/f/xExample123" method="POST">
         <label for="inv-email" class="sr-only">Email</label>
         <input type="email" id="inv-email" name="email" placeholder="Your email" required>
@@ -1495,6 +1495,7 @@ section {
     <p class="lightbox-caption" id="lightbox-caption"></p>
   </div>
 
+  <script src="variants.js"></script>
   <script>
 /* ======================================= */
 /* THREE.JS PARTICLES — subtle, sparse     */
