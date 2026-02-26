@@ -54,14 +54,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* === Light Progression Overlay === */
+/* === Light Progression Overlays === */
 #light-progression {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(ellipse 120% 80% at 50% 80%, rgba(180, 100, 40, 0.12), transparent 70%);
+  background: radial-gradient(ellipse 140% 70% at 50% 20%, rgba(200, 120, 50, 0.18), transparent 60%),
+              radial-gradient(ellipse 120% 80% at 50% 80%, rgba(180, 100, 40, 0.15), transparent 70%);
 }
 
 #warm-wash {
@@ -70,7 +71,16 @@ body {
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(140, 70, 30, 0.06) 50%, rgba(200, 120, 50, 0.1) 100%);
+  background: linear-gradient(180deg, rgba(180, 100, 40, 0.10) 0%, rgba(160, 85, 35, 0.08) 30%, rgba(140, 70, 30, 0.06) 50%, rgba(200, 120, 50, 0.12) 100%);
+}
+
+#sunrise-top {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(220, 140, 60, 0.22) 0%, rgba(200, 110, 45, 0.12) 25%, transparent 55%);
 }
 
 /* === WebGL Canvas === */
@@ -923,6 +933,7 @@ section {
   <canvas id="bg" aria-hidden="true"></canvas>
   <div id="light-progression" aria-hidden="true"></div>
   <div id="warm-wash" aria-hidden="true"></div>
+  <div id="sunrise-top" aria-hidden="true"></div>
 
   <div class="side-marker">Black Opal — The Dance — An Immersive Experience</div>
 
@@ -1591,49 +1602,65 @@ portalTl
   .to('.side-marker', { opacity: 1, duration: 1 }, '-=0.5');
 
 /* === LIGHT PROGRESSION === */
-// Warm radial glow intensifies as you scroll
+// Warm radial glow — starts early, intensifies quickly
 gsap.to('#light-progression', {
   opacity: 1,
-  ease: 'none',
+  ease: 'power1.in',
   scrollTrigger: {
-    trigger: '#tribe-luminous',
-    start: 'top bottom',
-    end: 'bottom top',
-    scrub: 2
+    trigger: '#awakening',
+    start: 'bottom top',
+    endTrigger: '#tribe-wild',
+    end: 'top top',
+    scrub: 1.5
   }
 });
 
-// Warm wash builds from middle to end
+// Warm wash builds through the middle sections
 gsap.to('#warm-wash', {
   opacity: 1,
   ease: 'none',
   scrollTrigger: {
-    trigger: '#tribe-wild',
-    start: 'top bottom',
-    endTrigger: '#dance',
-    end: 'bottom bottom',
+    trigger: '#tribe-luminous',
+    start: 'center center',
+    endTrigger: '#tribe-reclaimers',
+    end: 'top top',
     scrub: 2
   }
 });
 
-// Body background color progresses from cold black to warm dark
+// Sunrise glow at top of viewport — the payoff
+gsap.to('#sunrise-top', {
+  opacity: 1,
+  ease: 'power2.in',
+  scrollTrigger: {
+    trigger: '#tribe-wild',
+    start: 'top bottom',
+    endTrigger: '#encounter',
+    end: 'top top',
+    scrub: 2
+  }
+});
+
+// Body background color — faster warm-up
 const bodyColorTl = gsap.timeline({
   scrollTrigger: {
     trigger: '#awakening',
     start: 'top top',
-    endTrigger: '#invitation',
-    end: 'bottom bottom',
-    scrub: 3
+    endTrigger: '#dance',
+    end: 'top bottom',
+    scrub: 2
   }
 });
 
 bodyColorTl
-  .to('body', { backgroundColor: '#080807', duration: 0.15 })
-  .to('body', { backgroundColor: '#0b0a08', duration: 0.2 })
-  .to('body', { backgroundColor: '#0e0c09', duration: 0.2 })
-  .to('body', { backgroundColor: '#12100b', duration: 0.2 })
-  .to('body', { backgroundColor: '#16130e', duration: 0.15 })
-  .to('body', { backgroundColor: '#1a1610', duration: 0.1 });
+  .to('body', { backgroundColor: '#0a0908', duration: 0.08 })
+  .to('body', { backgroundColor: '#0f0d0a', duration: 0.12 })
+  .to('body', { backgroundColor: '#15120d', duration: 0.15 })
+  .to('body', { backgroundColor: '#1c1812', duration: 0.15 })
+  .to('body', { backgroundColor: '#231e16', duration: 0.15 })
+  .to('body', { backgroundColor: '#2a2319', duration: 0.15 })
+  .to('body', { backgroundColor: '#30281c', duration: 0.1 })
+  .to('body', { backgroundColor: '#352c1e', duration: 0.1 });
 
 /* === AWAKENING === */
 const awakeningTl = gsap.timeline({
