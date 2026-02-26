@@ -54,43 +54,37 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* === Light Progression Overlays === */
+/* === Light Progression Overlays ===
+   These sit ABOVE content with mix-blend-mode:screen
+   so they ADD real light to everything on the page.    */
+.sun-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+/* Phase 1: early warm tint — dawn glow */
 #light-progression {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(ellipse 140% 70% at 50% 20%, rgba(180, 100, 40, 0.35), transparent 65%),
-              radial-gradient(ellipse 120% 80% at 50% 85%, rgba(160, 80, 30, 0.25), transparent 70%);
+  background: radial-gradient(ellipse 130% 80% at 50% 60%, #3d2010, #1a0d05 60%, #000 80%);
 }
 
+/* Phase 2: sun rising — warm amber floods in */
 #warm-wash {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  background: linear-gradient(180deg, rgba(220, 140, 55, 0.45) 0%, rgba(200, 120, 50, 0.35) 25%, rgba(180, 100, 40, 0.25) 50%, rgba(160, 85, 35, 0.20) 75%, rgba(200, 120, 50, 0.30) 100%);
+  background: linear-gradient(180deg, #6b3a15 0%, #5a3012 30%, #4a2510 60%, #3d2010 100%);
 }
 
+/* Phase 3: golden hour — bright warm light from above */
 #sunrise-top {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  background: linear-gradient(180deg, rgba(255, 190, 90, 0.60) 0%, rgba(245, 170, 70, 0.45) 15%, rgba(230, 145, 55, 0.30) 35%, rgba(200, 120, 45, 0.12) 55%, transparent 75%);
+  background: linear-gradient(180deg, #c08030 0%, #a06828 20%, #7a4e1e 40%, #4a2d10 65%, #000 85%);
 }
 
+/* Phase 4: full daylight — bright and warm everywhere */
 #sunset-blaze {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(ellipse 160% 55% at 50% 10%, rgba(255, 210, 120, 0.70), rgba(255, 180, 80, 0.45) 35%, rgba(240, 150, 60, 0.20) 60%, transparent 80%),
-              linear-gradient(180deg, rgba(255, 200, 100, 0.50) 0%, rgba(245, 175, 75, 0.35) 20%, rgba(220, 140, 55, 0.20) 45%, rgba(180, 100, 40, 0.10) 70%, transparent 90%);
+  background: radial-gradient(ellipse 150% 60% at 50% 15%, #e8a848, #c88a38 30%, #9a6828 55%, #5a3818 75%, #000 95%),
+              linear-gradient(180deg, #d09840 0%, #b08030 25%, #886020 50%, #604018 75%, #000 100%);
 }
 
 /* === WebGL Canvas === */
@@ -941,10 +935,10 @@ section {
 <body>
 
   <canvas id="bg" aria-hidden="true"></canvas>
-  <div id="light-progression" aria-hidden="true"></div>
-  <div id="warm-wash" aria-hidden="true"></div>
-  <div id="sunrise-top" aria-hidden="true"></div>
-  <div id="sunset-blaze" aria-hidden="true"></div>
+  <div id="light-progression" class="sun-layer" aria-hidden="true"></div>
+  <div id="warm-wash" class="sun-layer" aria-hidden="true"></div>
+  <div id="sunrise-top" class="sun-layer" aria-hidden="true"></div>
+  <div id="sunset-blaze" class="sun-layer" aria-hidden="true"></div>
 
   <div class="side-marker">Black Opal — The Dance — An Immersive Experience</div>
 
