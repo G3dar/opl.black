@@ -1376,7 +1376,10 @@
 
     var slots = grid.querySelectorAll('.m-item');
     var count = slots.length;
-    var images = shuffle(config.pool).slice(0, count);
+    var shuffled = shuffle(config.pool);
+    /* Cycle pool if fewer images than slots, so no slot is ever empty */
+    var images = [];
+    for (var n = 0; n < count; n++) images.push(shuffled[n % shuffled.length]);
 
     slots.forEach(function (slot, i) {
       var data = images[i];
