@@ -1358,89 +1358,84 @@
     }
   });
 
-  /* ---- GLOBAL IMAGE DEDUP (shared by hero swaps + mosaic shuffles) ---- */
-  var usedImages = {};
-
-  /* Build master list of ALL unique mosaic images (for fallback + hero filtering) */
-  var allPoolImages = {};
-  var mosaicKeys = Object.keys(M);
-  for (var mk = 0; mk < mosaicKeys.length; mk++) {
-    var p = M[mosaicKeys[mk]].pool;
-    for (var pi = 0; pi < p.length; pi++) {
-      if (!allPoolImages[p[pi].webp]) allPoolImages[p[pi].webp] = p[pi];
+  /* ---- VISUAL EQUIVALENCE MAP ----
+     Files with different names but identical visual content (confirmed via
+     binary comparison of source PNGs). The dedup system treats every member
+     of a group as the same image so no two visually-identical files can
+     appear together on the page. */
+  var visualGroups = [
+    ['assets/mosaic/robots/octopus-bw.webp','assets/tribes/reclaimers/octopus-head.webp'],
+    ['assets/experience/drone-net-event.webp','assets/mosaic/experience/luxury-drone-party.webp'],
+    ['assets/mosaic/robots/crystal-pair.webp','assets/robots/tribes-floral-group.webp','assets/tribes/luminous/floral-four.webp'],
+    ['assets/experience/blue-waves.webp','assets/mosaic/atmosphere/blue-waves-person.webp'],
+    ['assets/mosaic/robots/ornate-pair.webp','assets/robots/tribes-desert-duo.webp'],
+    ['assets/mosaic/robots/fire-fish.webp','assets/robots/tribes-creature.webp'],
+    ['assets/mosaic/experience/neon-house.webp','assets/tribes/wild/neon-structure.webp'],
+    ['assets/mosaic/robots/neon-fashion.webp','assets/tribes/wild/neon-group.webp'],
+    ['assets/experience/neon-dining.webp','assets/mosaic/experience/blue-net-dining.webp'],
+    ['assets/experience/desert-venue.webp','assets/mosaic/experience/geodome-venue.webp'],
+    ['assets/bg/mountain-light.webp','assets/mosaic/atmosphere/mountain-lightline.webp'],
+    ['assets/mosaic/robots/armor-detail.webp','assets/robots/tribes-opal-closeup.webp'],
+    ['assets/bg/crystal-desert.webp','assets/mosaic/atmosphere/crystal-sculpture.webp'],
+    ['assets/mosaic/robots/hat-trio.webp','assets/robots/tribes-fashion-lineup.webp'],
+    ['assets/mosaic/robots/junk-girl.webp','assets/tribes/reclaimers/junk-kimono.webp'],
+    ['assets/experience/neon-table.webp','assets/mosaic/experience/light-net-dinner.webp'],
+    ['assets/bg/light-portal.webp','assets/mosaic/atmosphere/doorway-figure.webp'],
+    ['assets/mosaic/robots/gold-desert-angel.webp','assets/tribes/luminous/gold-cloak.webp'],
+    ['assets/mosaic/robots/neon-coral-queen.webp','assets/tribes/wild/neon-creature.webp']
+  ];
+  var visualMap = {};
+  for (var vg = 0; vg < visualGroups.length; vg++) {
+    for (var vi = 0; vi < visualGroups[vg].length; vi++) {
+      visualMap[visualGroups[vg][vi]] = vg;
     }
   }
-  var masterPool = [];
-  var masterKeys = Object.keys(allPoolImages);
-  for (var mi = 0; mi < masterKeys.length; mi++) masterPool.push(allPoolImages[masterKeys[mi]]);
-
-  /* 2. HERO IMAGE SWAPS — prefer images NOT in any mosaic pool */
+  function getVisualId(webp) {
+    return visualMap[webp] !== undefined ? ('vg' + visualMap[webp]) : webp;
+  }
+  /* 2. HERO IMAGE SWAPS */
   document.querySelectorAll('[data-v-img]').forEach(function (container) {
     var pool = I[container.getAttribute('data-v-img')];
     if (!pool || !pool.length) return;
-
-    /* Prefer exclusive images (not in mosaic pools and not already used) */
-    var exclusive = pool.filter(function (img) {
-      return !allPoolImages[img.webp] && !usedImages[img.webp];
-    });
-    /* Fall back to any unused image from this hero pool */
-    if (!exclusive.length) {
-      exclusive = pool.filter(function (img) {
-        return !usedImages[img.webp];
-      });
-    }
-    var chosen = exclusive.length ? pick(exclusive) : pick(pool);
-    usedImages[chosen.webp] = true;
-
+    var chosen = pick(pool);
     var source = container.querySelector('source');
     var img = container.querySelector('img');
     if (source) source.srcset = chosen.webp;
     if (img) { img.src = chosen.png; img.alt = chosen.alt; }
   });
 
-  /* 3. MOSAIC GRID SHUFFLES — no image appears twice on the page */
+  /* 3. MOSAIC GRID SHUFFLES — no visually-identical image within a grid */
   document.querySelectorAll('[data-v-mosaic]').forEach(function (grid) {
     var config = M[grid.getAttribute('data-v-mosaic')];
     if (!config) return;
 
     var slots = grid.querySelectorAll('.m-item');
     var count = slots.length;
+    var shuffled = shuffle(config.pool);
 
-    /* Filter out images already used by heroes or a previous mosaic, then shuffle */
-    var available = config.pool.filter(function (img) {
-      return !usedImages[img.webp];
-    });
-    var shuffled = shuffle(available);
-
-    /* If this pool doesn't have enough unique images, supplement from the global pool */
-    if (shuffled.length < count) {
-      var extra = masterPool.filter(function (img) {
-        return !usedImages[img.webp] && !available.some(function (a) { return a.webp === img.webp; });
-      });
-      shuffled = shuffled.concat(shuffle(extra));
+    /* Pick images ensuring no visual duplicates within this grid */
+    var gridVisuals = {};
+    var images = [];
+    for (var s = 0; s < shuffled.length && images.length < count; s++) {
+      var vid = getVisualId(shuffled[s].webp);
+      if (!gridVisuals[vid]) {
+        gridVisuals[vid] = true;
+        images.push(shuffled[s]);
+      }
     }
-
-    /* Take only what we need — never cycle, so no duplicates within a mosaic */
-    var images = shuffled.slice(0, count);
 
     slots.forEach(function (slot, i) {
       var data = images[i];
       if (!data) return;
 
-      /* Mark as globally used so later mosaics won't pick it */
-      usedImages[data.webp] = true;
-
-      /* Preserve layout class from the original layout array */
       slot.className = 'm-item';
       if (config.layout[i]) slot.classList.add(config.layout[i]);
 
-      /* Swap image */
       var source = slot.querySelector('source');
       var img = slot.querySelector('img');
       if (source) source.srcset = data.webp;
       if (img) { img.src = data.png; img.alt = data.alt; }
 
-      /* Swap captions */
       slot.setAttribute('data-caption', data.caption);
       var mCaption = slot.querySelector('.m-caption');
       if (mCaption) mCaption.textContent = data.short;
