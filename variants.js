@@ -1245,7 +1245,6 @@
       { webp:'assets/mosaic/robots/holographic-queen.webp', png:'assets/mosaic/robots/holographic-queen.png', alt:'Holographic queen', caption:'Spectrum made flesh, light made form', short:'Spectrum made flesh' },
       { webp:'assets/mosaic/robots/colorful-group.webp', png:'assets/mosaic/robots/colorful-group.png', alt:'Colorful group', caption:'A congregation of chromatic intelligence', short:'Chromatic intelligence' },
       { webp:'assets/tribes/wild/neon-creature.webp', png:'assets/tribes/wild/neon-creature.png', alt:'Neon creature', caption:'They arrived dancing, and they never stopped', short:'They arrived dancing' },
-      { webp:'assets/mosaic/experience/neon-house.webp', png:'assets/mosaic/experience/neon-house.png', alt:'Neon house', caption:'A neon house pulses with the frequency of the wild', short:'The frequency of the wild' },
       { webp:'assets/tribes/wild/neon-dancer.webp', png:'assets/tribes/wild/neon-dancer.png', alt:'Neon dancer', caption:'Neon dancer at the edge of sunset', short:'Edge of sunset' },
       { webp:'assets/mosaic/atmosphere/light-wave-sculpture.webp', png:'assets/mosaic/atmosphere/light-wave-sculpture.png', alt:'Light wave sculpture', caption:'Frozen waves of pure energy', short:'Pure energy' },
       { webp:'assets/mosaic/atmosphere/blue-waves-person.webp', png:'assets/mosaic/atmosphere/blue-waves-person.png', alt:'Blue waves person', caption:'Immersed in the current of consciousness', short:'Current of consciousness' },
@@ -1341,7 +1340,8 @@
       { webp:'assets/mosaic/atmosphere/mountain-lightline.webp', png:'assets/mosaic/atmosphere/mountain-lightline.png', alt:'Mountain lightline', caption:'A single line of light splits the desert night', short:'Light splits the night' },
       { webp:'assets/mosaic/atmosphere/star-ocean.webp', png:'assets/mosaic/atmosphere/star-ocean.png', alt:'Star ocean', caption:'The star ocean above the gathering', short:'Star ocean' },
       { webp:'assets/mosaic/atmosphere/desert-halo.webp', png:'assets/mosaic/atmosphere/desert-halo.png', alt:'Desert halo', caption:'A ring of light promises transformation', short:'Promise of transformation' },
-      { webp:'assets/mosaic/experience/fire-sparks.webp', png:'assets/mosaic/experience/fire-sparks.png', alt:'Fire sparks', caption:'Sparks rise like prayers into the desert night', short:'Sparks like prayers' }
+      { webp:'assets/mosaic/experience/fire-sparks.webp', png:'assets/mosaic/experience/fire-sparks.png', alt:'Fire sparks', caption:'Sparks rise like prayers into the desert night', short:'Sparks like prayers' },
+      { webp:'assets/mosaic/experience/neon-house.webp', png:'assets/mosaic/experience/neon-house.png', alt:'Neon house', caption:'A neon house pulses with desert frequency', short:'Desert frequency' }
     ]
   };
 
@@ -1358,20 +1358,10 @@
     }
   });
 
-  /* 2. HERO IMAGE SWAPS */
-  document.querySelectorAll('[data-v-img]').forEach(function (container) {
-    var pool = I[container.getAttribute('data-v-img')];
-    if (!pool || !pool.length) return;
-    var chosen = pick(pool);
-    var source = container.querySelector('source');
-    var img = container.querySelector('img');
-    if (source) source.srcset = chosen.webp;
-    if (img) { img.src = chosen.png; img.alt = chosen.alt; }
-  });
+  /* ---- GLOBAL IMAGE DEDUP (shared by hero swaps + mosaic shuffles) ---- */
+  var usedImages = {};
 
-  /* 3. MOSAIC GRID SHUFFLES — no image appears twice on the page */
-
-  /* Build a master list of ALL unique images across every pool (for fallback) */
+  /* Build master list of ALL unique mosaic images (for fallback + hero filtering) */
   var allPoolImages = {};
   var mosaicKeys = Object.keys(M);
   for (var mk = 0; mk < mosaicKeys.length; mk++) {
@@ -1384,7 +1374,31 @@
   var masterKeys = Object.keys(allPoolImages);
   for (var mi = 0; mi < masterKeys.length; mi++) masterPool.push(allPoolImages[masterKeys[mi]]);
 
-  var usedImages = {};
+  /* 2. HERO IMAGE SWAPS — prefer images NOT in any mosaic pool */
+  document.querySelectorAll('[data-v-img]').forEach(function (container) {
+    var pool = I[container.getAttribute('data-v-img')];
+    if (!pool || !pool.length) return;
+
+    /* Prefer exclusive images (not in mosaic pools and not already used) */
+    var exclusive = pool.filter(function (img) {
+      return !allPoolImages[img.webp] && !usedImages[img.webp];
+    });
+    /* Fall back to any unused image from this hero pool */
+    if (!exclusive.length) {
+      exclusive = pool.filter(function (img) {
+        return !usedImages[img.webp];
+      });
+    }
+    var chosen = exclusive.length ? pick(exclusive) : pick(pool);
+    usedImages[chosen.webp] = true;
+
+    var source = container.querySelector('source');
+    var img = container.querySelector('img');
+    if (source) source.srcset = chosen.webp;
+    if (img) { img.src = chosen.png; img.alt = chosen.alt; }
+  });
+
+  /* 3. MOSAIC GRID SHUFFLES — no image appears twice on the page */
   document.querySelectorAll('[data-v-mosaic]').forEach(function (grid) {
     var config = M[grid.getAttribute('data-v-mosaic')];
     if (!config) return;
@@ -1392,7 +1406,7 @@
     var slots = grid.querySelectorAll('.m-item');
     var count = slots.length;
 
-    /* Filter out images already used by a previous mosaic, then shuffle */
+    /* Filter out images already used by heroes or a previous mosaic, then shuffle */
     var available = config.pool.filter(function (img) {
       return !usedImages[img.webp];
     });
