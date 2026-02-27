@@ -438,7 +438,18 @@ section {
   align-items: center;
   justify-content: center;
   padding: 6rem 2rem;
+  position: relative;
 }
+
+.tribe-text::after {
+  content: ''; position: absolute; inset: -20% -30%;
+  border-radius: 50%; pointer-events: none; z-index: -1;
+  opacity: var(--glow-o, 0);
+}
+.tribe-luminous .tribe-text::after   { background: radial-gradient(ellipse, rgba(201,168,76,0.12), transparent 70%); }
+.tribe-wild .tribe-text::after       { background: radial-gradient(ellipse, rgba(224,62,106,0.10), transparent 70%); }
+.tribe-reclaimers .tribe-text::after { background: radial-gradient(ellipse, rgba(212,130,74,0.12), transparent 70%); }
+.tribe-witness .tribe-text::after    { background: radial-gradient(ellipse, rgba(91,143,185,0.10), transparent 70%); }
 
 .tribe-text p {
   font-family: var(--font-display);
@@ -449,6 +460,7 @@ section {
   max-width: 600px;
   line-height: 1.5;
   opacity: 0;
+  text-shadow: 0 0 40px currentColor;
 }
 
 .tribe-text .caption {
@@ -460,25 +472,25 @@ section {
   font-style: normal;
   display: block;
   margin-top: 1.5rem;
-  opacity: 0.4;
+  opacity: 0.6;
 }
 
 /* Tribe-specific colors */
 .tribe-luminous .tribe-name { color: var(--luminous); }
 .tribe-luminous .tribe-accent-line { background: var(--luminous); }
-.tribe-luminous .tribe-text p { color: rgba(201, 168, 76, 0.7); }
+.tribe-luminous .tribe-text p { color: rgba(201, 168, 76, 0.9); }
 
 .tribe-wild .tribe-name { color: var(--wild); }
 .tribe-wild .tribe-accent-line { background: var(--wild); }
-.tribe-wild .tribe-text p { color: rgba(224, 62, 106, 0.65); }
+.tribe-wild .tribe-text p { color: rgba(224, 62, 106, 0.85); }
 
 .tribe-reclaimers .tribe-name { color: var(--reclaimer); }
 .tribe-reclaimers .tribe-accent-line { background: var(--reclaimer); }
-.tribe-reclaimers .tribe-text p { color: rgba(212, 130, 74, 0.7); }
+.tribe-reclaimers .tribe-text p { color: rgba(212, 130, 74, 0.9); }
 
 .tribe-witness .tribe-name { color: var(--witness); }
 .tribe-witness .tribe-accent-line { background: var(--witness); }
-.tribe-witness .tribe-text p { color: rgba(91, 143, 185, 0.65); }
+.tribe-witness .tribe-text p { color: rgba(91, 143, 185, 0.85); }
 
 /* Tribe glow backgrounds */
 .tribe-luminous .tribe-header::before,
@@ -489,6 +501,7 @@ section {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  opacity: var(--header-glow, 1);
 }
 .tribe-luminous .tribe-header::before { background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--luminous-glow), transparent); }
 .tribe-wild .tribe-header::before { background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--wild-glow), transparent); }
@@ -548,7 +561,17 @@ section {
   max-width: 550px;
   line-height: 1.6;
   opacity: 0;
-  color: var(--white-dim);
+  color: rgba(232, 228, 223, 0.75);
+}
+
+.encounter-text {
+  position: relative;
+}
+.encounter-text::after {
+  content: ''; position: absolute; inset: -20% -30%;
+  border-radius: 50%; pointer-events: none; z-index: -1;
+  opacity: var(--glow-o, 0);
+  background: radial-gradient(ellipse, rgba(232,180,120,0.08), transparent 70%);
 }
 
 /* ========================== */
@@ -876,6 +899,46 @@ section {
   transform: translateY(0);
 }
 
+/* === Mosaic light-sweep shimmer === */
+.mosaic {
+  position: relative;
+  overflow: hidden;
+}
+.mosaic::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%);
+  transform: translateX(var(--sweep-x, -100%)); z-index: 3; pointer-events: none;
+}
+
+/* === Invitation phrase glow === */
+.invitation-phrase { position: relative; }
+.invitation-phrase::after {
+  content: ''; position: absolute; inset: -60% -40%;
+  border-radius: 50%; pointer-events: none; z-index: -1;
+  opacity: var(--glow-o, 0);
+  background: radial-gradient(ellipse, rgba(232,200,140,0.08), transparent 70%);
+}
+
+/* === Ambient Orbs === */
+.ambient-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  opacity: 0;
+  filter: blur(60px);
+  animation: orbFloat var(--dur, 30s) ease-in-out infinite alternate;
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(calc(var(--dx, 40px) * 0.6), calc(var(--dy, 30px) * -0.8)); }
+  50% { transform: translate(var(--dx, 40px), var(--dy, 30px)); }
+  75% { transform: translate(calc(var(--dx, 40px) * -0.4), calc(var(--dy, 30px) * 0.6)); }
+  100% { transform: translate(calc(var(--dx, 40px) * -1), calc(var(--dy, 30px) * -1)); }
+}
+
 /* === Image load transition === */
 .tribe-img img,
 .awakening-image img,
@@ -904,6 +967,7 @@ section {
   .mosaic .m-item.wide { grid-column: span 2; }
   .ic-cards { grid-template-columns: 1fr; }
   .side-marker { display: none; }
+  .ambient-orb { filter: blur(40px); }
 }
 
 @media (max-width: 480px) {
@@ -931,6 +995,16 @@ section {
   <canvas id="bg" aria-hidden="true"></canvas>
 
   <div class="side-marker">Black Opal — The Dance — An Immersive Experience</div>
+
+  <!-- Ambient floating orbs -->
+  <div class="ambient-orb" style="width:160px;height:160px;top:15%;left:8%;background:radial-gradient(circle,rgba(201,168,76,0.18),transparent 70%);--dx:50px;--dy:35px;--dur:28s"></div>
+  <div class="ambient-orb" style="width:120px;height:120px;top:35%;right:5%;background:radial-gradient(circle,rgba(224,62,106,0.14),transparent 70%);--dx:-40px;--dy:45px;--dur:34s"></div>
+  <div class="ambient-orb" style="width:200px;height:200px;top:55%;left:12%;background:radial-gradient(circle,rgba(212,130,74,0.12),transparent 70%);--dx:60px;--dy:-40px;--dur:38s"></div>
+  <div class="ambient-orb" style="width:100px;height:100px;top:70%;right:15%;background:radial-gradient(circle,rgba(91,143,185,0.16),transparent 70%);--dx:-35px;--dy:50px;--dur:24s"></div>
+  <div class="ambient-orb" style="width:140px;height:140px;top:25%;right:20%;background:radial-gradient(circle,rgba(201,168,76,0.10),transparent 70%);--dx:45px;--dy:-30px;--dur:32s"></div>
+  <div class="ambient-orb" style="width:180px;height:180px;top:80%;left:25%;background:radial-gradient(circle,rgba(224,62,106,0.10),transparent 70%);--dx:-55px;--dy:35px;--dur:40s"></div>
+  <div class="ambient-orb" style="width:90px;height:90px;top:45%;left:3%;background:radial-gradient(circle,rgba(91,143,185,0.14),transparent 70%);--dx:30px;--dy:40px;--dur:26s"></div>
+  <div class="ambient-orb" style="width:130px;height:130px;top:10%;left:60%;background:radial-gradient(circle,rgba(212,130,74,0.10),transparent 70%);--dx:-45px;--dy:-35px;--dur:36s"></div>
 
   <!-- ============================== -->
   <!-- SCENE 1: PORTAL                -->
@@ -1262,9 +1336,9 @@ section {
 
     <!-- WITNESS / EXPERIENCE MOSAIC -->
     <div class="mosaic" data-mosaic data-v-mosaic="witness">
-      <div class="m-item wide" data-caption="Standing in the digital tide, witnessing the birth of something new">
-        <picture><source srcset="assets/mosaic/atmosphere/blue-waves-person.webp" type="image/webp"><img src="assets/mosaic/atmosphere/blue-waves-person.png" alt="Person in blue light waves" loading="lazy"></picture>
-        <span class="m-caption">Witnessing something new</span>
+      <div class="m-item wide" data-caption="The drone flower illuminates the night sky">
+        <picture><source srcset="assets/experience/drone-flower.webp" type="image/webp"><img src="assets/experience/drone-flower.png" alt="Drone flower" loading="lazy"></picture>
+        <span class="m-caption">Luminous flower</span>
       </div>
       <div class="m-item" data-caption="The frequency is set. The dance begins.">
         <picture><source srcset="assets/mosaic/experience/robot-dj.webp" type="image/webp"><img src="assets/mosaic/experience/robot-dj.png" alt="Robot DJ" loading="lazy"></picture>
@@ -1400,13 +1474,13 @@ section {
         <picture><source srcset="assets/mosaic/experience/aurora-silhouettes.webp" type="image/webp"><img src="assets/mosaic/experience/aurora-silhouettes.png" alt="Aurora silhouettes" loading="lazy"></picture>
         <span class="m-caption">The aurora of intelligence</span>
       </div>
-      <div class="m-item" data-caption="A luxury party under the drone constellation">
-        <picture><source srcset="assets/mosaic/experience/luxury-drone-party.webp" type="image/webp"><img src="assets/mosaic/experience/luxury-drone-party.png" alt="Luxury drone party" loading="lazy"></picture>
-        <span class="m-caption">Under the constellation</span>
+      <div class="m-item" data-caption="A single line of light splits the desert night">
+        <picture><source srcset="assets/mosaic/atmosphere/mountain-lightline.webp" type="image/webp"><img src="assets/mosaic/atmosphere/mountain-lightline.png" alt="Mountain lightline" loading="lazy"></picture>
+        <span class="m-caption">Light splits the night</span>
       </div>
-      <div class="m-item" data-caption="The golden light formation beckons from within">
-        <picture><source srcset="assets/mosaic/atmosphere/golden-light.webp" type="image/webp"><img src="assets/mosaic/atmosphere/golden-light.png" alt="Golden light" loading="lazy"></picture>
-        <span class="m-caption">Light from within</span>
+      <div class="m-item" data-caption="Sparks rise like prayers into the desert night">
+        <picture><source srcset="assets/mosaic/experience/fire-sparks.webp" type="image/webp"><img src="assets/mosaic/experience/fire-sparks.png" alt="Fire sparks" loading="lazy"></picture>
+        <span class="m-caption">Sparks like prayers</span>
       </div>
       <div class="m-item wide" data-caption="The massive drone flower illuminates the desert sky">
         <picture><source srcset="assets/experience/drone-flower.webp" type="image/webp"><img src="assets/experience/drone-flower.png" alt="Drone flower" loading="lazy"></picture>
@@ -1813,6 +1887,170 @@ gsap.to('.invitation-content', {
     toggleActions: 'play none none reverse'
   }
 });
+
+/* ======================================= */
+/* AMBIENT VFX                             */
+/* ======================================= */
+
+/* --- 2. Tribe text breathing glow (::after pulse) --- */
+document.querySelectorAll('.tribe-text').forEach(block => {
+  const proxy = { opacity: 0 };
+  const breathe = gsap.to(proxy, {
+    opacity: 1, duration: 2.5, repeat: -1, yoyo: true, ease: 'sine.inOut', paused: true,
+    onUpdate: () => { block.style.setProperty('--glow-o', proxy.opacity); }
+  });
+  ScrollTrigger.create({
+    trigger: block,
+    start: 'top 85%',
+    end: 'bottom 15%',
+    onEnter: () => breathe.play(),
+    onLeave: () => { breathe.pause(); gsap.to(proxy, { opacity: 0, duration: 0.5, onUpdate: () => block.style.setProperty('--glow-o', proxy.opacity) }); },
+    onEnterBack: () => breathe.play(),
+    onLeaveBack: () => { breathe.pause(); gsap.to(proxy, { opacity: 0, duration: 0.5, onUpdate: () => block.style.setProperty('--glow-o', proxy.opacity) }); }
+  });
+});
+
+/* --- 3. Floating ambient orbs — fade in after portal, color shift per section --- */
+const allOrbs = gsap.utils.toArray('.ambient-orb');
+// On mobile, hide the last 4 orbs
+if (isMobile) {
+  allOrbs.slice(4).forEach(orb => { orb.style.display = 'none'; });
+}
+const orbs = isMobile ? allOrbs.slice(0, 4) : allOrbs;
+// Fade orbs in after portal
+gsap.to(orbs, {
+  opacity: 1,
+  duration: 2,
+  stagger: 0.3,
+  ease: 'sine.inOut',
+  scrollTrigger: {
+    trigger: '#awakening',
+    start: 'top 80%',
+    toggleActions: 'play none none reverse'
+  }
+});
+
+/* --- 4. Tribe header glow pulse (::before breathing) --- */
+document.querySelectorAll('.tribe-header').forEach(header => {
+  const proxy = { opacity: 0.5 };
+  const breathe = gsap.to(proxy, {
+    opacity: 1, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut', paused: true,
+    onUpdate: () => { header.style.setProperty('--header-glow', proxy.opacity); }
+  });
+  ScrollTrigger.create({
+    trigger: header,
+    start: 'top 70%',
+    end: 'bottom 20%',
+    onEnter: () => breathe.play(),
+    onLeave: () => breathe.pause(),
+    onEnterBack: () => breathe.play(),
+    onLeaveBack: () => breathe.pause()
+  });
+});
+
+/* --- 5. Mosaic light-sweep shimmer --- */
+gsap.utils.toArray('.mosaic').forEach(grid => {
+  const sweep = { x: -100 };
+  gsap.to(sweep, {
+    x: 100,
+    duration: 1.5,
+    ease: 'power2.inOut',
+    paused: false,
+    onUpdate: () => { grid.style.setProperty('--sweep-x', sweep.x + '%'); },
+    scrollTrigger: {
+      trigger: grid,
+      start: 'top 75%',
+      toggleActions: 'play none none none'
+    }
+  });
+});
+
+/* --- 6. Encounter section warm glow breathing --- */
+document.querySelectorAll('.encounter-text').forEach(block => {
+  const proxy = { opacity: 0 };
+  const breathe = gsap.to(proxy, {
+    opacity: 1, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut', paused: true,
+    onUpdate: () => { block.style.setProperty('--glow-o', proxy.opacity); }
+  });
+  ScrollTrigger.create({
+    trigger: block,
+    start: 'top 85%',
+    end: 'bottom 15%',
+    onEnter: () => breathe.play(),
+    onLeave: () => { breathe.pause(); gsap.to(proxy, { opacity: 0, duration: 0.5, onUpdate: () => block.style.setProperty('--glow-o', proxy.opacity) }); },
+    onEnterBack: () => breathe.play(),
+    onLeaveBack: () => { breathe.pause(); gsap.to(proxy, { opacity: 0, duration: 0.5, onUpdate: () => block.style.setProperty('--glow-o', proxy.opacity) }); }
+  });
+});
+
+/* --- 7. Dance section enhanced neon glow --- */
+const danceTitle = document.querySelector('.dance-title');
+if (danceTitle) {
+  const neonProxy = { intensity: 0 };
+  const neonPulse = gsap.to(neonProxy, {
+    intensity: 1, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut', paused: true,
+    onUpdate: () => {
+      const i = neonProxy.intensity;
+      const cyan = 0.2 + i * 0.35;
+      const pink = 0.15 + i * 0.25;
+      danceTitle.style.textShadow = `0 0 ${60 + i * 80}px rgba(77,201,246,${cyan}), 0 0 ${150 + i * 100}px rgba(194,24,91,${pink}), 0 0 ${30 + i * 40}px rgba(77,201,246,${cyan * 0.5})`;
+    }
+  });
+  ScrollTrigger.create({
+    trigger: '#dance',
+    start: 'top 70%',
+    end: 'bottom 20%',
+    onEnter: () => neonPulse.play(),
+    onLeave: () => neonPulse.pause(),
+    onEnterBack: () => neonPulse.play(),
+    onLeaveBack: () => neonPulse.pause()
+  });
+}
+
+/* --- Dance section warm↔cool overlay --- */
+const danceSection = document.getElementById('dance');
+if (danceSection) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;mix-blend-mode:overlay;';
+  overlay.style.background = 'linear-gradient(135deg, rgba(200,120,50,0.08), rgba(77,150,220,0.08))';
+  danceSection.prepend(overlay);
+  const colorProxy = { shift: 0 };
+  gsap.to(colorProxy, {
+    shift: 1, duration: 12, repeat: -1, yoyo: true, ease: 'sine.inOut',
+    onUpdate: () => {
+      const s = colorProxy.shift;
+      overlay.style.background = `linear-gradient(135deg, rgba(200,${80 + s * 80},${30 + s * 60},${0.06 + s * 0.04}), rgba(${50 + s * 40},${120 + s * 50},220,${0.06 + s * 0.04}))`;
+    }
+  });
+  ScrollTrigger.create({
+    trigger: '#dance',
+    start: 'top 70%',
+    end: 'bottom 20%',
+    onEnter: () => gsap.to(overlay, { opacity: 1, duration: 1.5 }),
+    onLeave: () => gsap.to(overlay, { opacity: 0, duration: 1 }),
+    onEnterBack: () => gsap.to(overlay, { opacity: 1, duration: 1.5 }),
+    onLeaveBack: () => gsap.to(overlay, { opacity: 0, duration: 1 })
+  });
+}
+
+/* --- 8. Invitation phrase pulse glow --- */
+const invPhrase = document.querySelector('.invitation-phrase');
+if (invPhrase) {
+  const proxy = { opacity: 0 };
+  const breathe = gsap.to(proxy, {
+    opacity: 1, duration: 3, repeat: -1, yoyo: true, ease: 'sine.inOut', paused: true,
+    onUpdate: () => { invPhrase.style.setProperty('--glow-o', proxy.opacity); }
+  });
+  ScrollTrigger.create({
+    trigger: '#invitation',
+    start: 'top 70%',
+    end: 'bottom 20%',
+    onEnter: () => breathe.play(),
+    onLeave: () => breathe.pause(),
+    onEnterBack: () => breathe.play(),
+    onLeaveBack: () => breathe.pause()
+  });
+}
 
 /* ======================================= */
 /* LIGHTBOX                                */

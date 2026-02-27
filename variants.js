@@ -1369,21 +1369,52 @@
     if (img) { img.src = chosen.png; img.alt = chosen.alt; }
   });
 
-  /* 3. MOSAIC GRID SHUFFLES */
+  /* 3. MOSAIC GRID SHUFFLES — no image appears twice on the page */
+
+  /* Build a master list of ALL unique images across every pool (for fallback) */
+  var allPoolImages = {};
+  var mosaicKeys = Object.keys(M);
+  for (var mk = 0; mk < mosaicKeys.length; mk++) {
+    var p = M[mosaicKeys[mk]].pool;
+    for (var pi = 0; pi < p.length; pi++) {
+      if (!allPoolImages[p[pi].webp]) allPoolImages[p[pi].webp] = p[pi];
+    }
+  }
+  var masterPool = [];
+  var masterKeys = Object.keys(allPoolImages);
+  for (var mi = 0; mi < masterKeys.length; mi++) masterPool.push(allPoolImages[masterKeys[mi]]);
+
+  var usedImages = {};
   document.querySelectorAll('[data-v-mosaic]').forEach(function (grid) {
     var config = M[grid.getAttribute('data-v-mosaic')];
     if (!config) return;
 
     var slots = grid.querySelectorAll('.m-item');
     var count = slots.length;
-    var shuffled = shuffle(config.pool);
-    /* Cycle pool if fewer images than slots, so no slot is ever empty */
-    var images = [];
-    for (var n = 0; n < count; n++) images.push(shuffled[n % shuffled.length]);
+
+    /* Filter out images already used by a previous mosaic, then shuffle */
+    var available = config.pool.filter(function (img) {
+      return !usedImages[img.webp];
+    });
+    var shuffled = shuffle(available);
+
+    /* If this pool doesn't have enough unique images, supplement from the global pool */
+    if (shuffled.length < count) {
+      var extra = masterPool.filter(function (img) {
+        return !usedImages[img.webp] && !available.some(function (a) { return a.webp === img.webp; });
+      });
+      shuffled = shuffled.concat(shuffle(extra));
+    }
+
+    /* Take only what we need — never cycle, so no duplicates within a mosaic */
+    var images = shuffled.slice(0, count);
 
     slots.forEach(function (slot, i) {
       var data = images[i];
       if (!data) return;
+
+      /* Mark as globally used so later mosaics won't pick it */
+      usedImages[data.webp] = true;
 
       /* Preserve layout class from the original layout array */
       slot.className = 'm-item';
